@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Employee</title>
+
+        <!-- Bootstrap -->
+        <%- include('../common/stylesheets'); %>
+        <style type="text/css">
+            .fa-trash {
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body class="nav-md">
+        <div class="container body">
+            <div class="main_container">
+                <%- include('../common/resident-navigation'); %>
+
+                <!-- page content -->
+
+                <div class="right_col" role="main">
+                    <div class="">
+                        <div class="page-title">
+                            <div class="title_left" style="width:100%">
+                                <h3>
+                                    <i class="fa fa-cog services-icon"></i>Services</h3>
+                            </div>
+
+                        </div>
+                        <!-- page title -->
+
+                        <div class="clearfix"></div>
+
+                        <div class="">
+
+                            <div class="clearfix"></div>
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="x_panel" style="border-radius:0">
+                                        <div class="x_content">
+                                            <h4 class="label_add-service-request">Add Service Request</h4>
+
+                                            <div class="row service-request-form-wrapper">
+                                              <form class="form-label-left input_mask service-request" id="add-service-request-form" style="margin:11px 0;">
+
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <select name="serviceType" id="serviceTypeSelect" class="form-control">
+                                                            <option disabled selected>Select Service Type</option>
+                                                            <% for (var i = 0; i < myServices.length; i++) { %>
+                                                              <option value="<%= myServices[i]._id %>">
+                                                                <%= myServices[i].serviceName %>
+                                                              </option>
+                                                            <% } %>
+                                                        </select>
+
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <input type="text" class="form-control" name="preferredSchedule" placeholder="Preferred Schedule">
+
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+
+                                                        <input type="text" class="form-control" name="description" placeholder="Description">
+
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <button class="btn btn-success" type="submit">Add</button>
+                                                </div>
+                                              </form>
+
+                                            </div>
+
+                                            <br/>
+
+                                            <div class="row">
+                                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="x_panel" style="padding:0">
+                                                      <% if (serviceRequests!= null && serviceRequests.length != 0) { %>
+
+                                                        <div class="x_title label-my-services">
+                                                            <h2 style="font-weight:200">My Services</h2>
+
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                        <div class="x_content" style="padding:0">
+                                                            <table class="table common-table">
+
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Date</th>
+                                                                        <th>Services Type</th>
+                                                                        <th>Descriptions</th>
+                                                                        <th>Preferred Schedule</th>
+                                                                        <th>Time Allocated</th>
+                                                                        <th>Status</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                  <% for (var i = 0 ; i < serviceRequests.length ; i++) { %>
+                                                                    <tr>
+                                                                        <td><%= moment(serviceRequests[i].date).format('DD-MMM-YYYY') %></th>
+                                                                        <td><%= serviceRequests[i].serviceType.serviceName %></td>
+                                                                        <td><%= serviceRequests[i].description %></td>
+                                                                        <td style="font-weight:700"><%= serviceRequests[i].preferredSchedule ? serviceRequests[i].preferredSchedule : '' %></td>
+                                                                        <td style="font-weight:700"><%= serviceRequests[i].timeAllocated ? serviceRequests[i].timeAllocated : '' %></td>
+                                                                        <td style="font-weight:700"><%= serviceRequests[i].status ? serviceRequests[i].status : '' %></td>
+                                                                    </tr>
+                                                                    <% }
+
+                                                                  } else { %>
+                                                                      <div class="row">
+
+                                                                        <h3 class="text-center">No Service requests found</h3>
+                                                                      </div>
+                                                                <%  }%>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <!-- x-content -->
+                                                    </div>
+                                                    <!-- x_panel -->
+                                                </div>
+                                            </div>
+
+                                            <div class="x_panel" style="padding:3px 5px 13px;">
+
+                                                <div class="x_title label-all-services">
+                                                    <h4 style="font-weight:200;">All Services</h4>
+                                                </div>
+
+                                                <% if (error || services.length == 0) { %>
+                                                    <div class="row">
+                                                        <h2>No services found</h2>
+                                                    </div>
+                                                <% } else {
+                                                  var temp = [];
+                                                  myServices.forEach(function (obj) {
+                                                    temp.push(String(obj._id));
+                                                  });
+                                                  %>
+
+                                                  <% for (var i = 0; i  < services.length; i++) { %>
+                                                    <div class="col-md-3 col-sm-4 col-xs-6">
+
+                                                        <button class="btn btn-block <%= (temp.indexOf(String(services[i]._id)) >= 0) ? 'btn-success' : '' %> my-service-btn" onclick="addToMyService('<%= services[i]._id %>', this)"><%= services[i].serviceName %>
+                                                            <i class="fa fa-plus-circle"></i>
+                                                        </button>
+                                                    </div>
+                                                <%
+                  }
+                 } %>
+                                            </div>
+
+                                        </div>
+                                        <!-- x_content -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- /page content -->
+                    </div>
+                </div>
+                <!-- right_col -->
+            </div>
+            <!-- main container -->
+        </div>
+        <!-- container body -->
+
+        <!-- jQuery -->
+        <script src="/vendors/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- FastClick -->
+        <script src="/vendors/fastclick/lib/fastclick.js"></script>
+        <!-- NProgress -->
+        <script src="/vendors/nprogress/nprogress.js"></script>
+        <!-- bootstrap-progressbar -->
+        <script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+        <!-- iCheck -->
+        <script src="/vendors/iCheck/icheck.min.js"></script>
+        <!-- PNotify -->
+        <script src="/vendors/pnotify/dist/pnotify.js"></script>
+        <script src="/vendors/pnotify/dist/pnotify.buttons.js"></script>
+        <script src="/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+        <script type="text/javascript" src="/vendors/serializejson.min.js"></script>
+
+        <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+        <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+        <!-- Custom Theme Scripts -->
+        <script src="/js/custom.min.js"></script>
+
+        <script type="text/javascript">
+
+            function addToMyService(id, btn) {
+                $.ajax({
+                    url: '/addToMyService',
+                    method: "PUT",
+                    data: {
+                        serviceId: id
+                    },
+                    success: function(data) {
+                        if (!data.error) {
+                            if ($(btn).hasClass('btn-success')) {
+                              $(btn).removeClass('btn-success');
+                              $('#serviceTypeSelect option[value="'+id+'"]').remove();
+                            } else {
+                              $(btn).addClass('btn-success');
+                              $('#serviceTypeSelect').append(new Option($(btn).text(), id));
+                            }
+                            }
+                        }
+                })
+            }
+
+            $('#add-service-request-form').submit(function (e) {
+              e.preventDefault();
+              $.ajax({
+                  url: '/services',
+                  method: "POST",
+                  data: $(this).serializeJSON(),
+                  success: function(data) {
+                      if (!data.error) {
+                            window.location.reload();
+                          }
+                      }
+              })
+            });
+        </script>
+
+    </script>
+</body>
+</html>

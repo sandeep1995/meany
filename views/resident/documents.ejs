@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+    <%- include('../common/stylesheets'); %>
+
+    <!-- AWS SDK -->
+    <script type="text/javascript" src="/bower_components/aws-sdk/dist/aws-sdk.min.js"></script>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+
+        <!-- page content -->
+
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%">
+                <h3>
+                  <i class="fa fa-folder-open my-documents-icon"></i>My Documents</h3>
+              </div>
+
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+
+                  <div class="x_panel" style="padding-top:5px; border-radius:0">
+
+                    <div class="x_content">
+                      <div id="uploadedFileURL"></div>
+                      <div class="row" style="margin:3px 0;">
+                        <h4 class="add-new_label">Add New Document</h4>
+
+                        <div class="x_panel" style="border-radius:0">
+
+                          <div class="col-md-8 col-sm-8 col-xs-12">
+
+                            <div class="row">
+
+                              <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                                <div class="upload-document" style="margin-bottom:5px;">
+                                  <form action="form_upload.html" class="dropzone">
+                                    <input type='file' id='ul-file' style="display: none;">
+                                    <div class="dz-default dz-message" onclick="simulateClickOnUlFile(event)">
+                                      <i id="uploading-placeholder" class="fa fa-paperclip"></i>
+                                    </div>
+                                  </form>
+                                </div>
+                                <!-- upload-document -->
+                                <div class="text-center" id="file-name">
+                                  Choose File to Upload
+                                </div>
+                              </div>
+
+                              <div class="col-lg-7 col-md-7 col-sm-6 col-xs-12">
+
+                                <div class="form-group document-type_form-padding">
+                                  <select id="doc-type" class="form-control">
+                                    <option value="" selected disabled>Document Type</option>
+                                    <% documentTypes.forEach(function (type) { %>
+                                      <option value="<%= type %>"><%= type %></option>
+                                    <% }); %>
+                                  </select>
+
+                                  <input id="doc-note" type="text" class="form-control has-feedback-left" placeholder="Add Note">
+                                  <span class="fa fa-sticky-note-o form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-md-2 col-sm-3 col-xs-12">
+                                <button id="add-document-btn" class="btn btn-success add-document-btn" onclick="submitForm(event)">Add</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- x _panel -->
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <div class="x_panel" style="border-radius:0; padding:0">
+                            <div class="x_title label-my-documents">
+                              <h2 style="font-weight:200;">My Documents</h2>
+
+                              <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content" style="padding:0">
+                              <table class="table common-table">
+                                <thead>
+                                  <tr>
+                                    <th>Date</th>
+                                    <th>Document Type</th>
+                                    <th>Note</th>
+                                    <th>Uploaded By</th>
+                                    <th class="text-center">Download</th>
+                                    <th class="text-center">Delete</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% data.forEach(function (doc) { %>
+                                  <tr>
+                                    <td><%= moment(doc.uploadDateTime).format("DD-MMM-YYYY") %></th>
+                                    <td><%= doc.docType %></td>
+                                    <td><%= doc.note %></td>
+                                    <td style="font-weight:700"><%= doc.addedBy.name %></td>
+                                    <td class="text-center">
+                                      <a download="<%= doc.aws.fileName %>"  class="dl-file-link" data-bucket="<%= doc.aws.bucket %>" data-key="<%= doc.aws.key %>">
+                                        <i class='fa fa-download'></i>
+                                      </a>
+                                    </td>
+                                    <td class="text-center">
+                                      <i class="fa fa-trash hover-pointer" onclick="deleteThis(event, '<%= doc.id %>', '<%= doc.aws.bucket %>', '<%= doc.aws.key %>')"></i>
+                                    </td>
+                                  </tr>
+                                  <% }); %>
+
+                                </tbody>
+                              </table>
+                            </div>
+                            <!-- x-content -->
+                          </div>
+                          <!-- x_panel -->
+                        </div>
+                      </div>
+
+                    </div>
+                    <!-- x-content -->
+                  </div>
+                  <!-- x_panel -->
+                </div>
+              </div>
+
+            </div>
+            <!-- /page content -->
+
+            <!-- footer content
+                        <footer>
+                            <div class="pull-right">
+                                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </footer>
+                        <!-- /footer content -->
+          </div>
+        </div>
+        <!-- right_col -->
+
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <!--
+                        <footer>
+                            <div class="pull-right">
+                                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </footer>
+                        -->
+        <!-- /footer content -->
+        <!-- right_col -->
+
+        <!-- <div id="custom_notifications" class="custom-notifications dsp_none">
+                    <ul class="list-unstyled notifications clearfix" data-tabbed-notifications="notif-group"></ul>
+                    <div class="clearfix"></div>
+                    <div id="notif-group" class="tabbed_notifications"></div>
+                </div> -->
+      </div>
+      <!-- main container -->
+    </div>
+    <!-- container body -->
+
+    <%- include('../common/javascripts'); %>
+
+    <script type="text/javascript">
+    // AWS Config
+    var tempCreds = {
+  		accessKeyId: '<%= tempCreds.AccessKeyId %>',
+  		secretAccessKey: '<%= tempCreds.SecretAccessKey %>',
+  		sessionToken: '<%= tempCreds.SessionToken %>'
+  	}
+    AWS.config.update(tempCreds) ;
+    // Configure your region
+    AWS.config.region = '<%= awsRegion %>';
+    var bucket = new AWS.S3({params: {Bucket: '<%= awsDocumentBucketName %>'}});
+
+    // $("#ul-file").change(function () {
+    //   var file = ($(this))[0].files[0]; // jquery object has no file property!!
+    //   console.log();
+    //   if (file) {
+    //     $("#uploading-placeholder").removeClass("fa-paperclip").addClass("fa-spin fa-spinner")
+    //     $("#file-name").html(file.name);
+    //     $("#add-document-btn").prop("disabled", false)
+    //     var params = {Key: '<%= awsKey %>', ContentType: file.type, Body: file};
+    //     bucket.upload(params, function (err, data) {
+    //       if (err) {
+    //         alert("Error Uploading File to AWS!!");
+    //         console.log("Error Uploading File to AWS: %o",err);
+    //       }
+    //       console.log(data);
+    //       $("#uploading-placeholder").removeClass("fa-spin fa-spinner").addClass("fa-check")
+    //       $("#file-name").css("font-weight", "bolder");
+    //       var params = {Bucket: data.Bucket, Key: data.Key};
+    //       bucket.getSignedUrl('getObject', params, function (err, url) {
+    //         console.log("The URL is", url);
+    //         $("#uploadedFileURL").html(url)
+    //       });
+    //     });
+    //   } else {
+    //     $("#file-name").html("Choose File to Upload");
+    //     $("#add-document-btn").prop("disabled", true)
+    //   }
+    //
+    // })
+
+$(document).ready(function () {
+  $(".dl-file-link").each(function (l) {
+    var self = $(this);
+    var params = {Bucket: $(this).data("bucket"), Key: $(this).data("key")};
+    bucket.getSignedUrl('getObject', params, function (err, url) {
+      console.log("The URL is", url);
+      self.prop('href',url);
+    });
+
+  })
+})
+
+
+      var ulToAWS = function (file, cb) {
+        var params = {Key: '<%= awsKey %>', ContentType: file.type, Body: file};
+        bucket.upload(params, function (err, data) {
+          if (err) {
+            // alert("Error Uploading File to AWS!!");
+            console.log("Error Uploading File to AWS: %o",err);
+            cb("Error Uploading File to AWS", null);
+          }
+          console.log(data);
+          cb(null, data);
+        });
+
+      }
+
+      var delFromAWS = function (bucket, key, cb) {
+        var s3 = new AWS.S3();
+        var params = {Key: key, Bucket: bucket};
+        s3.deleteObject(params, function (err, data) {
+          if (err) {
+            console.log("Error Deleting file from AWS: %o", err);
+            cb("Error Deleting file from AWS");
+          }
+          console.log(data);
+          cb(null);
+        })
+      }
+
+
+
+      var simulateClickOnUlFile = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $('#ul-file').click() // Simulate click on input[type=file] to choose file to ul
+      }
+
+      var submitForm = function (e) {
+        e.preventDefault();
+
+        $("#add-document-btn").prop("disabled", true); // prevent double submission!
+        $("#add-document-btn").html("Saving <i class='fa fa-spin fa-spinner'></i>");
+
+        var fileToUl = (($('#ul-file'))[0].files[0]);
+        var fileName = fileToUl.name; // original file name
+        var docType = $("select#doc-type :selected").val();
+        var note = $("#doc-note").val();
+
+        console.log('start uploading to aws......');
+        ulToAWS(fileToUl, function (err, awsResp) {
+          // console.log('done uploading to aws......');
+
+          if (err) {
+            alert(err); // ul to aws failed!
+          } else {
+
+            // AJAX call
+            // console.log('start ajax save......');
+            $.ajax({
+              url: "/documents",
+              method: "POST",
+              data: {
+                docType: docType,
+                note: note,
+                aws: {
+                  key: awsResp.Key,
+                  bucket: awsResp.Bucket,
+                  fileName: fileName
+                }
+              },
+              success: function(result) {
+                // console.log('done ajax save......');
+
+                if (result.error) {
+                  alert('oops')
+                } else {
+                  // alert('yaay')
+                  window.location.reload();
+                }
+              }
+            });
+
+          }
+        })
+      }
+
+      var deleteThis = function (e, docId, bucket, key) {
+        var resp = confirm ("You sure??");
+        if (!resp) return;
+        delFromAWS(bucket, key, function (err) {
+          if (err) {
+            alert(err);
+          }
+          $.ajax({
+            url: "/documents",
+            method: "DELETE",
+            data: {
+              id: docId
+              // societyId: '123456789'
+            },
+            success: function(result) {
+              if (result.error) {
+                alert('oops')
+              } else {
+                // alert('yaay')
+                window.location.reload();
+              }
+            }
+          });
+        })
+
+      }
+
+      var downloadFile = function (bucket, key) {
+        var popup = window.open('');
+        popup.document.write("<a href='http://www.livemint.com/rf/Image-621x414/LiveMint/Period2/2016/03/19/Photos/kolkata2-k1HG--621x414@LiveMint.jpg' download id='click2dl'></a>");
+        popup.document.getElementById('click2dl').click();
+        popup.close();
+
+      }
+
+        // POST new notice
+        var postNewNotice = function() {
+          $.ajax({
+            url: "/admin/notices",
+            method: "POST",
+            data: {
+              subject: $("#notice-subject").val(),
+              content: $("#notice-desc").val(),
+              // societyId: '123456789'
+            },
+            success: function(result) {
+              if (result.error) {
+                alert('oops')
+              } else {
+                alert('yaay')
+              }
+            }
+          });
+        };
+        $("#add-new-notice-btn").click(function(e) {
+          postNewNotice();
+          $("#modal-add-notice").modal('hide');
+        })
+    </script>
+
+    <!-- PNotify -->
+    <!--
+            <script>
+      $(document).ready(function() {
+        new PNotify({
+          title: "PNotify",
+          type: "info",
+          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+          nonblock: {
+              nonblock: true
+          },
+          addclass: 'dark',
+          styling: 'bootstrap3',
+          hide: false,
+          before_close: function(PNotify) {
+            PNotify.update({
+              title: PNotify.options.title + " - Enjoy your Stay",
+              before_close: null
+            });
+
+            PNotify.queueRemove();
+
+            return false;
+          }
+        });
+
+      });
+            </script>
+          -->
+    <!-- PNotify -->
+
+    <!-- Custom Notification -->
+    <script></script>
+    <!-- /Custom Notification -->
+  </body>
+</html>

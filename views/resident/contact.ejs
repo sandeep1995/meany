@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Contact Us</title>
+
+<%- include('../common/stylesheets'); %>
+  <style type="text/css">
+      tr:hover {
+        cursor: pointer;
+      }
+  </style>
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+      
+      <!-- page content -->
+
+      
+      <div class="right_col" role="main">
+
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left" style="width:100%">
+                        <h3><i class="fa fa-envelope contact-us-icon"></i>Contact Us</h3>
+                    </div>
+                  
+                </div>
+                <!-- page title -->
+
+                <div class="clearfix"></div>
+
+                <div class="">
+
+                    <div class="clearfix"></div>
+
+                    <div class="x_panel" style="padding:23px 25px;">
+                        <div class="row">
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                
+                <div class="x_panel" style="padding:7px 22px 10px">
+                                    
+                                    <form id="contact-form" data-parsley-validate>
+                                        <p class="contact_options">
+                        <span><input type="radio" class="flat"  name="category" value="General"  checked />
+                                            General</span>
+                        
+                      <span class="selected"><input type="radio" class="flat selected" name="category" value="Complaints"
+                                                />
+                                            Complaint</span>
+                                            
+                      <span><input type="radio" class="flat"  name="category"  value="Suggestion"/>
+                                            Suggestion</span>
+                                        </p>
+
+                                        <p>
+                                            <label for="fullname" >Subject</label>
+                                            <input type="text" id="subject" class="form-control" name="subject"
+                                                   required
+                                                   placeholder="Summary of Issue"/>
+                                        </p>
+
+                                        <p style="margin-top:15px;">
+                                            <label for="description">Description</label>
+                                            <textarea class="form-control" name="description" id="description" 
+                                                  rows="5" placeholder="Details" required></textarea>
+                                            <br/>
+                                        </p>
+                                        <div class="text-center" style="margin-bottom:10px;">
+                                            <button type="submit" class="btn btn-success">Send</button>
+                                        </div>
+
+                                    </form>
+                                </div> <!-- x_panel -->
+              </div> 
+            </div>
+            <% if (!error && data.length == 0) { %>
+<div class="row">
+ <div class="col-md-12 col-sm-12 col-xs-12">
+                <p class="lead text-center">No messages found</p>
+                </div>
+</div>
+            <% } else { %>
+
+            <div class="row">
+               
+                                <div class="x_panel" style="padding:0">
+                                    <div class="x_title label-my-complaints">
+                                        
+                    <h2>My Complaints</h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content" style="padding:0">
+                                        <table class="table complain-table">
+                                            <thead>
+
+
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Category</th>
+                                                <th>Subject</th>
+                        <th>Opened By</th>
+                                                <th>Status</th>
+                        
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                   <% for ( var i = 0; i < data.length; i++) { %>
+                                        <tr data-toggle="collapse" data-target="#info-row-<%= data[i].id%>">
+                                                <th><%= moment(data[i].dateOpened).format('DD-MMM-YYYY'); %></th>
+                                                <td><%= data[i].category %></td>
+                                                <td><%= data[i].subject  %></td>
+                                                <td><%= data[i].openedBy.name %></td>
+                                                <td><%= data[i].status %></td>
+                                            </tr>
+                      <tr id="info-row-<%= data[i].id%>" class="collapse">
+                                                <td colspan="6" class="complain-dropdown">
+                       <% for (var j = 0; j < data[i].messages.length; j++ ) { %>
+
+                          <div class="gray-bg" style="padding:7px 10px;">
+                            <h5><b> <%= data[i].messages[j].userId.name %> </b> (<%= data[i].messages[j].userId.role %>)
+                            <span> <%= moment(data[i].messages[j].dateTime).format('DD-MMM-YYYY, hh:mm A'); %></span></h5>
+                          <p> <%= data[i].messages[j].message %></p>
+                          </div>
+                       
+                           <% } %>
+
+                            <form class="form-group">
+                            <div class="col-xs-12">
+                              <textarea class="form-control" rows="2" placeholder="Reply" id="reply-<%= data[i].id%>"></textarea>
+                            <div class="text-center" style="margin-top:10px; margin-bottom:5px;">
+                            </div>
+                                <div class="form-inline service-request text-center">
+                                      <select class="form-control" name="status" id="status-<%= data[i].id%>">
+                                                                
+                                                                <option value="In Progress" <%= (data[i].status == "In Progress") ? 'selected' : "" %> >In Progress</option>
+                                                                <option value="Closed"
+                                                                 <%= (data[i].status == "Closed") ? 'selected' : "" %> 
+                                                                >Closed</option>
+                                      </select>
+                              &nbsp; &nbsp; &nbsp;
+                              <button class="btn btn-xs btn-success" type="submit">&nbsp; Send &nbsp; </button>
+                                    </div>
+                            </div>
+                          </form> <!-- form-group -->
+                           </td>
+                          </tr>
+                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div> <!-- x-content -->
+                                </div>  <!-- x_panel -->
+                            </div>
+            </div>
+                    </div>  <!-- x_panel  -->
+                </div>
+                <% } %>
+
+          <!-- /page content -->
+        </div>
+      </div>
+      <!-- right_col -->
+
+      <div id="custom_notifications" class="custom-notifications dsp_none">
+        <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group"></ul>
+        <div class="clearfix"></div>
+        <div id="notif-group" class="tabbed_notifications"></div>
+      </div>
+    </div>
+    <!-- main container -->
+  </div>
+  <!-- container body -->
+
+  <!-- jQuery -->
+  <script src="/vendors/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- FastClick -->
+  <script src="/vendors/fastclick/lib/fastclick.js"></script>
+  <!-- NProgress -->
+  <script src="/vendors/nprogress/nprogress.js"></script>
+  <!-- bootstrap-progressbar -->
+  <script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+  <!-- iCheck -->
+  <script src="/vendors/iCheck/icheck.min.js"></script>
+  <!-- PNotify -->
+  <script src="/vendors/pnotify/dist/pnotify.js"></script>
+  <script src="/vendors/pnotify/dist/pnotify.buttons.js"></script>
+  <script src="/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+  <script type="text/javascript" src="/vendors/serializejson.min.js"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="/js/custom.min.js"></script>
+
+  <script>
+    
+    $('#contact-form').submit(function(e){
+      e.preventDefault();
+      if ($('#description').val() == '')
+        return;
+      var fdata = {
+        subject : $('#subject').val(),
+        category: $('input[name=category]:checked' ).val(),
+        messages : {
+          message : $('#description').val()
+        }
+      };
+
+      console.log(fdata);
+
+      $.ajax({
+        url: '/contacts',
+        method: "POST",
+        data: fdata,
+        success: function (data) {
+          if(!data.error)
+            window.location.href = window.location.href;
+        }
+      })
+    });
+
+    <% for ( var i = 0; i < data.length; i++) { %> 
+
+        $('#info-row-<%= data[i].id%>').submit(function (e) {
+          e.preventDefault();
+          if ($('#reply-<%= data[i].id %>').val() == '')
+            return;
+          var replyMsg = $('#reply-<%= data[i].id %>').val();
+          var status = $('#status-<%= data[i].id %>').val();
+          var contactId = "<%= data[i].id%>";
+          $.ajax({
+            url: '/reply',
+            method: 'POST',
+            data: {
+              message: replyMsg,
+              status: status,
+              contactId: contactId
+            },
+            success: function (data) {
+              console.log(data);
+              if ( !data.error)
+                window.location.href = window.location.href;
+            }
+          });
+        })
+
+    <% } %>
+
+  </script>
+
+</body>
+
+</html>

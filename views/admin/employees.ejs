@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Employee</title>
+
+    <%- include('../common/stylesheets'); %>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+
+        <%- include('../common/navigation'); %>
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%">
+                <h3>
+                  <i class="fa fa-group employee-list-icon"></i>Employee List</h3>
+              </div>
+
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="x_panel">
+                    <div class="x_content">
+                      <div class="row" style="margin:0;">
+                        <!--   <h4 class="add-new_label">Add New Employee</h4> -->
+
+                        <div class="x_panel" style="padding:12px 5px 8px">
+
+                          <form class="form-inline search-visitor-field">
+                     <h4 class="label-filter"><i class="fa fa-filter"></i>Filter</h4>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" value="<%= (query.name) ? query.name : '' %>" id="name" name="name" placeholder="Enter Name">
+                            </div>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" id="contactPhone" value="<%= (query.contactPhone) ? query.contactPhone : '' %>" name="contactPhone" placeholder="Phone Number">
+                            </div>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" id="block" value="<%= (query.block) ? query.block : '' %>" name="block" placeholder="Block Number">
+                            </div>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" id="flat" value="<%= (query.flatNo) ? query.flatNo : '' %>" name="flatNo" placeholder="Flat Number">
+                            </div>
+                            <button class="btn btn-success btn-search" type="submit" style="margin-top:5px;"><i class="fa fa-search" style="font-size:20px"></i></button>
+                          <a href="/admin/employees" class="btn btn-sm btn-info">Clear Filter</a>
+                          </form>
+                        </div>
+                        <!--- x_panel- -->
+                      </div>
+
+                                            <% if ( error ) { %>
+
+                                            <div class="row">
+                                                <h3><%= message %></h3>
+                                            </div>
+
+                                              <% } if (!error && data.length == 0) { %>
+                                           <div class="row">
+                                                <h3>Nothing found</h3>
+                                            </div>
+                                            <% }
+                                            if (!error && data.length > 0)
+                                            { %>
+
+
+                      <div class="row">
+                        <h4 class="label_visitors-list">Employee List</h4>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="x_panel">
+
+                            <ul class="list-unstyled employees-list">
+                            <%  for ( var i = 0; i < Math.ceil(data.length/2); i++) { %>
+                              <li>
+                                <article class="media event">
+                                  <a class="pull-left employee-pic-block">
+                                    <img src="<%= data[i].awsProfilePicURL %>" class="employee-pic" onError="this.src= '/images/img.jpg'">
+                                    <h5>
+                                      <b><%= data[i].name %></b>
+                                    </h5>
+                                    <p>
+                                      <i class="fa fa-suitcase"></i><%= data[i].role %></p>
+                                    <p>
+                                      <i class="fa fa-transgender"></i>
+                                      <%= data[i].gender %></p>
+                                  </a>
+                                  <div class="media-body approve-employee-details">
+                                    <p>
+                                      <b>Added By :</b>
+                                      <%= data[i].addedBy.name %> (<%= data[i].addedBy.block %>, <%= data[i].addedBy.flatNo %>)
+                                       <span>
+                                      <% if (data[i].approvalStatus == "Pending") { %>
+
+                                        <button class="btn btn-danger btn-xs" onclick="reject('<%= data[i]._id %>')">Reject</button>
+                                        <button class="btn btn-success btn-xs" onclick="approve('<%= data[i]._id %>')">Approve</button>
+                                      <% } else { %>
+                                      <b class="<%= (data[i].approvalStatus == 'Rejected') ? 'text-danger' : '' %>"><%= data[i].approvalStatus %></b>
+                                      <% } %>
+                                       </span>
+                                    </p>
+                                    <p>
+                                      <i class="fa fa-mobile-phone"></i>
+                                      +91 <%= data[i].contactPhone %></p>
+                                    <p>
+                                      <i class="fa fa-calendar-o"></i>
+                                      <%= moment(data[i].dob).format("DD-MM-YYYY") %></p>
+                                    <p>
+                                      <i class="fa fa-clock-o"></i>
+                                      <%= data[i].regularSchedule %>
+                                      </p>
+                                  </div>
+                                </article>
+                              </li>
+                          <% } %>
+
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="x_panel">
+
+                            <ul class="list-unstyled employees-list">
+                              <%  for ( var i = Math.ceil(data.length/2); i < data.length; i++) { %>
+                              <li>
+                                <article class="media event">
+                                  <a class="pull-left employee-pic-block">
+                                    <img src="<%= data[i].awsProfilePicURL %>" class="employee-pic" onError="this.src= '/images/img.jpg'">
+                                    <h5>
+                                      <b><%= data[i].name %></b>
+                                    </h5>
+                                    <p>
+                                      <i class="fa fa-suitcase"></i><%= data[i].role %></p>
+                                    <p>
+                                      <i class="fa fa-transgender"></i>
+                                      <%= data[i].gender %></p>
+                                  </a>
+                                  <div class="media-body approve-employee-details">
+                                   <p>
+                                      <b>Added By :</b>
+                                      <%= data[i].addedBy.name %> (<%= data[i].addedBy.block %>, <%= data[i].addedBy.flatNo %>)
+                                      <span>
+                                      <% if (data[i].approvalStatus == "Pending") { %>
+
+                                        <button class="btn btn-danger btn-xs" onclick="reject('<%= data[i]._id %>')">Reject</button>
+                                        <button class="btn btn-success btn-xs" onclick="approve('<%= data[i]._id %>')">Approve</button>
+                                      <% } else { %>
+                                      <b class="<%= (data[i].approvalStatus == 'Rejected') ? 'text-danger' : '' %>"><%= data[i].approvalStatus %></b>
+                                      <% } %>
+                                       </span>
+                                    </p>
+                                    <p>
+                                      <i class="fa fa-mobile-phone"></i>
+                                      +91 <%= data[i].contactPhone %></p>
+                                    <p>
+                                      <i class="fa fa-calendar-o"></i>
+                                      <%= moment(data[i].dob).format("DD-MM-YYYY") %></p>
+                                    <p>
+                                      <i class="fa fa-clock-o"></i>
+                                      <%= data[i].regularSchedule %>
+                                      </p>
+                                  </div>
+                                </article>
+                              </li>
+                              <% } %>
+                            </ul>
+
+                          </div>
+                        </div>
+                      </div>
+                      <% } %>
+                    </div>
+                    <!-- x-content -->
+                  </div>
+                  <!-- x_panel -->
+                </div>
+              </div>
+
+            </div>
+            <!-- /page content -->
+          </div>
+        </div>
+        <!-- right_col -->
+
+        <div id="custom_notifications" class="custom-notifications dsp_none">
+          <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group"></ul>
+          <div class="clearfix"></div>
+          <div id="notif-group" class="tabbed_notifications"></div>
+        </div>
+      </div>
+      <!-- main container -->
+    </div>
+    <!-- container body -->
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- PNotify -->
+    <script src="../vendors/pnotify/dist/pnotify.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="/js/custom.min.js"></script>
+    <!-- Dropzone.js -->
+    <script src="../vendors/dropzone/dist/min/dropzone.min.js"></script>
+
+    <script type="text/javascript">
+        function approve(id) {
+        console.log(id);
+        $.ajax({
+                url: 'employees/approve',
+                method: 'PUT',
+                data: {residentEmpID: id},
+                success: function (data) {
+                    if (!data.error) {
+                        window.location.reload();
+                    }
+          }
+        });
+      }
+
+       function reject(id) {
+        console.log(id);
+        $.ajax({
+                url: 'employees/reject',
+                method: 'PUT',
+                data: {residentEmpID: id},
+                success: function (data) {
+                    if (!data.error) {
+                        window.location.reload();
+                    }
+          }
+        });
+      }
+
+    </script>
+
+  </body>
+</html>

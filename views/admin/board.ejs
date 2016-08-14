@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+    <%- include('../common/stylesheets'); %>
+    <style>
+    .member-position-label {
+      padding: 7px;
+    }
+    </style>
+
+    <!-- AWS SDK -->
+    <script type="text/javascript" src="/bower_components/aws-sdk/dist/aws-sdk.min.js"></script>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/navigation'); %>
+
+        <!-- page content -->
+
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:40%">
+                <h3>
+                  <i class="fa fa-group members-icon"></i>Board of Members</h3>
+              </div>
+              <div class="title_right" style="width:60%;">
+                <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                  <button class="btn btn-success" data-toggle="modal" data-target="#add-member-modal" style="float:right">
+                    <i class="fa fa-plus-circle" style="padding-right:8px;"></i>Add Member
+                  </button>
+                  <% if (!hasPresident) { %>
+                  <button class="btn btn-info" data-toggle="modal" data-target="#add-president-modal" style="float:right">
+                    <i class="fa fa-plus-circle" style="padding-right:8px;"></i>Add President
+                  </button>
+                  <% } %>
+                </div>
+              </div>
+              <!-- title right -->
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="x_panel" style="padding-top:22px;">
+                    <div class="x_content">
+
+                      <% if (!data.error) {  data.forEach(function (member){
+                        if (member.position == "President") { %>
+
+                        <div class="row">
+                          <div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-12 profile_details">
+                            <div class="well profile_view members-detail">
+                              <div class="col-sm-12">
+                                <h4 class="brief">
+                                  <%= member.name %>
+                                  <i class="fa fa-edit pull-right hover-pointer" data-toggle="modal" data-target="#edit-member-modal-<%= member.id %>"></i>
+                                </h4>
+                                <div class="right col-xs-5 member-img-padding">
+                                  <img src="<%= member.awsProfilePicURL %>" alt="" class="member-img img-responsive">
+                                </div>
+                                <div class="left col-xs-7">
+                                  <span class="label label-info member-position-label"><%= member.position %></span>
+
+                                  <hr style="margin-top:8px; margin-bottom:8px;">
+
+                                  <ul class="list-unstyled contact_member">
+                                    <li>
+                                      <i class="fa fa-mobile-phone icon_mobile"></i><%= member.contactPhone %></li>
+                                    <li>
+                                      <i class="fa fa-envelope"></i><%= member.contactEmail %></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- well profile_view -->
+                          </div>
+                          <!-- profile_details -->
+                        </div>
+
+                      <% } }); }%>
+
+                      <div class="row">
+                        <% if (!data.error) {  data.forEach(function (member){
+                        if (member.position != "Member" && member.position !="President") { %>
+                          <div class="col-md-3  col-sm-4  col-xs-12 profile_details">
+                            <div class="well profile_view members-detail">
+                              <div class="col-sm-12">
+                                <h4 class="brief">
+                                  <%= member.name %>
+                                  <i class="fa fa-edit pull-right hover-pointer" data-toggle="modal" data-target="#edit-member-modal-<%= member.id %>"></i>
+                                </h4>
+                                <div class="right col-xs-5 member-img-padding">
+                                  <img src="<%= member.awsProfilePicURL %>" alt="" class="member-img img-responsive">
+                                </div>
+                                <div class="left col-xs-7">
+                                  <span class="label label-warning member-position-label"><%= member.position %></span>
+
+                                  <hr style="margin-top:8px; margin-bottom:8px;">
+
+                                  <ul class="list-unstyled contact_member">
+                                    <li>
+                                      <i class="fa fa-mobile-phone icon_mobile"></i><%= member.contactPhone %></li>
+                                    <li>
+                                      <i class="fa fa-envelope"></i><%= member.contactEmail %></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- well profile_view -->
+                          </div>
+                          <!-- profile_details -->
+
+                        <% } }); }%>
+                      </div>
+
+                      <!-- 3rd level -->
+                      <div class="row">
+                        <% if (!data.error) {  data.forEach(function (member){
+                        if (member.position == "Member") { %>
+                          <div class="col-md-3  col-sm-4  col-xs-12 profile_details">
+                            <div class="well profile_view members-detail">
+                              <div class="col-sm-12">
+                                <h4 class="brief">
+                                  <%= member.name %>
+                                  <i class="fa fa-edit pull-right hover-pointer" data-toggle="modal" data-target="#edit-member-modal-<%= member.id %>"></i>
+                                </h4>
+                                <div class="right col-xs-5 member-img-padding">
+                                  <img src="<%= member.awsProfilePicURL %>" alt="" class="member-img img-responsive">
+                                </div>
+                                <div class="left col-xs-7">
+                                  <span class="label label-danger member-position-label"><%= member.position %></span>
+
+                                  <hr style="margin-top:8px; margin-bottom:8px;">
+
+                                  <ul class="list-unstyled contact_member">
+                                    <li>
+                                      <i class="fa fa-mobile-phone icon_mobile"></i><%= member.contactPhone %></li>
+                                    <li>
+                                      <i class="fa fa-envelope"></i><%= member.contactEmail %></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- well profile_view -->
+                          </div>
+                          <!-- profile_details -->
+
+                        <% } }); }%>
+                      </div>
+
+                    </div>
+                    <!-- x_content -->
+                  </div>
+                  <!-- x_panel -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ADD board of members modal --->
+            <div id="add-member-modal" class="modal fade bs4-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel3">Add Board Member</h4>
+                  </div>
+                  <div class="modal-body" style="padding:0">
+                    <h4>Board Members</h4>
+                    <div class="row board-members-modal">
+                      <%# <i class="fa fa-trash" style="font-size:19px;"></i>%>
+                      <div class="col-xs-7">
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" id="member-name" placeholder="Name">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" id="member-phone" placeholder="Phone">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="email" class="form-control" id="member-email" placeholder="Email">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" id="member-designation" placeholder="Designation">
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="upload-document" style="margin-bottom:5px;">
+                          <form action="form_upload.html" class="dropzone">
+                            <input type='file' id='member-photo' class='file-inp' style="display: none;">
+                            <div class="dz-default dz-message file-inp-img">
+                              <i id="uploading-placeholder" class="fa fa-user-plus"></i>
+                            </div>
+                          </form>
+                        </div>
+
+                      </div>
+                      <div class="col-xs-1"></div>
+                    </div>
+                    <!-- board members-modal -->
+                    <br/>
+                    <div class="text-center">
+                      <button class="btn btn-success" style="border-radius:10%;">
+                        <i class="fa fa-plus" style="font-size:21px;" id="add-member-btn"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- modal-body -->
+                </div>
+                <!-- modal-content -->
+              </div>
+            </div>
+            <!-- /end ADD members modal --->
+
+            <!-- ADD president modal --->
+            <div id="add-president-modal" class="modal fade bs4-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel3">Add President</h4>
+                  </div>
+                  <div class="modal-body" style="padding:0">
+                    <h4>Board President</h4>
+                    <div class="row board-members-modal">
+                      <%# <i class="fa fa-trash" style="font-size:19px;"></i>%>
+                      <div class="col-xs-7">
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" id="president-name" placeholder="Name">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" id="president-phone" placeholder="Phone">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="email" class="form-control" id="president-email" placeholder="Email">
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="upload-document" style="margin-bottom:5px;">
+                          <form action="form_upload.html" class="dropzone">
+                            <input type='file' id='president-photo' class='file-inp' style="display: none;">
+                            <div class="dz-default dz-message file-inp-img">
+                              <i id="uploading-placeholder" class="fa fa-user-plus"></i>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                      <div class="col-xs-1"></div>
+                    </div>
+                    <!-- board members-modal -->
+                    <br/>
+                    <div class="text-center">
+                      <button class="btn btn-success" style="border-radius:10%;">
+                        <i class="fa fa-plus" style="font-size:21px;" id="add-president-btn"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- modal-body -->
+                </div>
+                <!-- modal-content -->
+              </div>
+            </div>
+            <!-- /end ADD President modal --->
+
+            <!-- EDIT board of members modals --->
+            <% data.forEach(function (member) { %>
+            <div id="edit-member-modal-<%= member.id %>" class="modal fade bs4-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                    <% if (member.position == "President") { %>
+                      <h4 class="modal-title" id="myModalLabel3">Edit Board President</h4>
+                    <% } else { %>
+                      <h4 class="modal-title" id="myModalLabel3">Edit Board Member</h4>
+                    <% } %>
+                  </div>
+                  <div class="modal-body" style="padding:0">
+                    <div class="row board-members-modal">
+                      <div class="col-xs-7">
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" id="member-name-<%= member.id %>" placeholder="Name" value="<%= member.name %>">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" id="member-phone-<%= member.id %>" placeholder="Phone" value="<%= member.contactPhone %>">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="email" class="form-control" id="member-email-<%= member.id %>" placeholder="Email" value="<%= member.contactEmail %>">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" id="member-designation-<%= member.id %>" placeholder="Designation" value="<%= member.position %>">
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="upload-document" style="margin-bottom:5px;">
+                          <form action="form_upload.html" class="dropzone">
+                            <input type='file' id='member-photo-<%= member.id %>' class='file-inp' style="display: none;">
+                            <div class="dz-default dz-message file-inp-img">
+                              <!-- <i id="uploading-placeholder" class="fa fa-user-plus"></i> -->
+                              <img class='img img-responsive' src='<%= member.awsProfilePicURL %>' />
+                            </div>
+                          </form>
+                        </div>
+                        <span class='ul-file-name'></span>
+                      </div>
+                      <div class="col-xs-1"></div>
+                    </div>
+                    <!-- board members-modal -->
+                    <br/>
+                    <div class="text-center">
+                      <button class="btn btn-success edit-member-btn" style="border-radius:10%;" data-member-id="<%= member.id %>">
+                        <i class="fa fa-save" style="font-size:21px;"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- modal-body -->
+                </div>
+                <!-- modal-content -->
+              </div>
+            </div>
+            <% }); %>
+            <!-- /end EDIT members modals loop -->
+
+
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <!--
+                        <footer>
+                            <div class="pull-right">
+                                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </footer>
+                        -->
+            <!-- /footer content -->
+            <!-- right_col -->
+
+            <!-- <div id="custom_notifications" class="custom-notifications dsp_none">
+                    <ul class="list-unstyled notifications clearfix" data-tabbed-notifications="notif-group"></ul>
+                    <div class="clearfix"></div>
+                    <div id="notif-group" class="tabbed_notifications"></div>
+                </div> -->
+          </div>
+          <!-- main container -->
+        </div>
+        <!-- container body -->
+
+        <%- include('../common/javascripts'); %>
+
+        <script type="text/javascript">
+        $('.file-inp-img').click(function (e) {
+          $(this).prev('.file-inp').click(); // simulate click on input[type=file] when clicking on placeholder phot
+        });
+
+        $('.file-inp').change(function () { // show preview of selected photo
+          var fileInp = this;
+          var reader = new FileReader();
+          reader.onload = function(event) {
+            the_url = event.target.result
+            $(fileInp).next('.file-inp-img').html("<img class='img img-responsive' src='"+the_url+"'/>")
+          }
+          reader.readAsDataURL(this.files[0]);
+
+        })
+
+        // AWS Config
+        var tempCreds = {
+          accessKeyId: '<%= tempCreds.AccessKeyId %>',
+      		secretAccessKey: '<%= tempCreds.SecretAccessKey %>',
+      		sessionToken: '<%= tempCreds.SessionToken %>'
+      	}
+        AWS.config.update(tempCreds) ;
+        // Configure your region
+        AWS.config.region = '<%= awsRegion %>';
+        var bucket = new AWS.S3({params: {Bucket: '<%= awsImageBucketName %>'}});
+
+        var ulImgToAWS = function (key, file, cb) {
+          if (!file || !key) cb("AWS UL Error: Either no File OR no Key!!", null);
+          var params = {Key: key, ContentType: file.type, Body: file};
+          bucket.upload(params, function (err, data) {
+            if (err) {
+              // alert("Error Uploading File to AWS!!");
+              console.log("Error Uploading File to AWS: %o",err);
+              cb("Error Uploading File to AWS", null);
+            }
+            console.log(data);
+            cb(null, data);
+          });
+        }
+        //
+        // $(".dropzone").click(function (e) {
+        //   e.preventDefault()
+        //   e.stopPropagation();
+        //   $(this).find('.file-input').click();
+        // })
+
+          var addMember = function (member)  {
+            var memberImgFile = member.imgFile;
+            delete member.imgFile; // don't send this to server to pass validation!
+            $.ajax({
+              url: "/admin/board",
+              method: "POST",
+              data: member,
+              success: function(result) {
+                if (result.error) {
+                  alert('oops')
+                } else {
+                  // alert('yaay');
+                  var key = result.data.id; // the id of newly added member
+                  console.log("AWS img file key: ", key);
+                  ulImgToAWS(key, memberImgFile, function (err, awsResp) {
+                    if (err) {
+                      // alert('Failed uploading image to AWS');
+                      console.log('Failed uploading image to AWS: ', err);
+                    }
+                    window.location.reload();
+                  })
+                }
+              }
+            });
+          }
+
+          $(document).ready(function() {
+            // $('.cloudinary-ul').unsigned_cloudinary_upload ("preset_sandeep",
+            //   { cloud_name: 'sandeep123', tags: 'browser_uploads' },
+            //   { multiple: true }
+            // ).bind('cloudinarydone', function (e, data) {
+            //   console.log("cloduinary ul done... %o", data);
+            // })
+
+            $("#add-member-btn").click(function (e) {
+              e.preventDefault();
+              var member = {
+                name: $("#member-name").val(),
+                position: $("#member-designation").val(),
+                contactEmail: $("#member-email").val(),
+                contactPhone: $("#member-phone").val(),
+                imgFile: $("#member-photo")[0].files[0]
+              }
+              console.log(member);
+              $("#add-member-modal").modal('hide');
+              addMember(member);
+            });
+            $("#add-president-btn").click(function (e) {
+              e.preventDefault();
+              var member = {
+                name: $("#president-name").val(),
+                position: "President",
+                contactEmail: $("#president-email").val(),
+                contactPhone: $("#president-phone").val(),
+                imgFile: $("#president-photo")[0].files[0]
+              }
+              // console.log(member);
+              $("#add-president-modal").modal('hide');
+              addMember(member);
+            });
+
+            $(".edit-member-btn").click(function (e) {
+              e.preventDefault();
+              var memberId = $(this).data('member-id');
+              var member = {
+                name: $("#member-name-"+memberId).val(),
+                position: $("#member-designation-"+memberId).val(),
+                contactEmail: $("#member-email-"+memberId).val(),
+                contactPhone: $("#member-phone-"+memberId).val(),
+              }
+              var memberImgFile = $("#member-photo-"+memberId)[0].files[0];
+              console.log(member);
+              $("#edit-member-modal-"+memberId).modal('hide');
+              $.ajax({
+                url: "/admin/board/"+memberId,
+                method: "PUT",
+                data: member,
+                success: function(result) {
+                  if (result.error) {
+                    alert('oops')
+                  } else {
+                    ulImgToAWS(memberId, memberImgFile, function (err, awsResp) {
+                      if (err) {
+                        // alert('Failed uploading image to AWS');
+                        console.log('Failed uploading image to AWS: %o', err);
+                      }
+                      window.location.reload();
+                    })
+                  }
+                }
+              });
+            })
+
+          });
+        </script>
+
+        <!-- PNotify
+            <script>
+      $(document).ready(function() {
+        new PNotify({
+          title: "PNotify",
+          type: "info",
+          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+          nonblock: {
+              nonblock: true
+          },
+          addclass: 'dark',
+          styling: 'bootstrap3',
+          hide: false,
+          before_close: function(PNotify) {
+            PNotify.update({
+              title: PNotify.options.title + " - Enjoy your Stay",
+              before_close: null
+            });
+
+            PNotify.queueRemove();
+
+            return false;
+          }
+        });
+
+      });
+            </script>
+           <!-- PNotify -->
+
+        <!-- Custom Notification -->
+        <!-- /Custom Notification -->
+      </body>
+    </html>

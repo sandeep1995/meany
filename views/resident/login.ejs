@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title><%= title %></title>
+
+        <%- include("../common/stylesheets") %>
+
+        <link href="/css/admin_page.css" rel="stylesheet">
+    </head>
+    <body class="nav-md">
+        <div class="container body">
+            <div class="main_container login_bg-img">
+                <div class="row" style="margin:0">
+
+                    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1 login-bg">
+                        <div class="login-form-bg">
+                            <img src="images/Logo-Login.png" alt="" class="img-responsive">
+                            <!-- form -->
+                            <form id="login_form" class="form-label-left input_mask" method="POST">
+                                <div class="alert alert-danger" id="alert"></div>
+                                <div class="col-xs-12 form-group has-feedback">
+                                    <input name="contactEmail" type="email" class="form-control has-feedback-left" placeholder="Email">
+                                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+
+                                    <input name="password" type="password" style="margin-top:20px;" class="form-control has-feedback-left" placeholder="Password">
+                                    <span class="fa fa-unlock-alt form-control-feedback left" aria-hidden="true" style="top:54px;"></span>
+                                </div>
+                                <button type="submit" class="btn btn-success">Log In
+                                    <i id="spinner" class="fa fa-spinner fa-spin"></i>
+                                </button>
+
+                            </form>
+                            <div class="forgot-password-txt">
+                                Forgot your password ?
+                                <span>Reset Here</span><br/>
+                                Forgot your username ? Contact your RWA Admin
+                            </div>
+                            <!-- form -->
+                        </div>
+                        <!-- login-bg -->
+                    </div>
+                    <!-- login-bg -->
+
+                    <footer class="login-footer">
+                        <div class="footer-text">
+                            <p>&#169 2016 All Rights Reserved. www.smartechsociety.com
+                                <span>Powered by :
+                                    <span class="label-logic-square">
+                                        Logic Square Technologies</span>
+                                </span>
+                            </p>
+                        </div>
+                    </footer>
+
+                </div>
+                <!-- main container -->
+            </div>
+            <!-- container body -->
+            <!-- jQuery -->
+            <script src="/vendors/jquery/dist/jquery.min.js"></script>
+            <!-- Bootstrap -->
+            <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+            <!-- FastClick -->
+            <script src="/vendors/fastclick/lib/fastclick.js"></script>
+            <!-- NProgress -->
+            <script src="/vendors/nprogress/nprogress.js"></script>
+            <!-- bootstrap-progressbar -->
+            <script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+            <!-- iCheck -->
+            <script src="/vendors/iCheck/icheck.min.js"></script>
+            <!-- PNotify -->
+            <script src="/vendors/pnotify/dist/pnotify.js"></script>
+            <script src="/vendors/pnotify/dist/pnotify.buttons.js"></script>
+            <script src="/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+            <script type="text/javascript" src="/vendors/serializejson.min.js"></script>
+            <!-- Custom Theme Scripts -->
+            <script src="/js/custom.min.js"></script>
+            <script type="text/javascript">
+                var alert = $('#alert');
+                var spinner = $('#spinner');
+                alert.hide();
+                spinner.hide();
+
+                $('#login_form').submit(function(e) {
+                    e.preventDefault();
+                    spinner.fadeIn();
+                    $.ajax({
+                        method: "POST",
+                        url: '/login',
+                        data: $(this).serializeJSON(),
+                        success: function(res) {
+                            if (res.error) {
+                                alert.slideDown();
+                                spinner.fadeIn();
+                                alert.html(res.message);
+                            } else {
+                                window.location.href = '/notices';
+                            }
+                        },
+                        error: function() {
+                            alert.slideDown();
+                            spinner.fadeIn();
+                            alert.html('Network problem');
+                        },
+                        complete: function() {
+                            spinner.fadeOut();
+                            setTimeout(function() {
+                                alert.slideUp();
+                            }, 3000);
+                        }
+                    });
+                });
+            </script>
+
+        </body>
+    </html>

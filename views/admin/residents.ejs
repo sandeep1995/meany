@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+    <%- include('../common/stylesheets'); %>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/navigation'); %>
+
+        <!-- page content -->
+
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%">
+                <h3>
+                  <i class="fa fa-group members-icon"></i>Manage Residents</h3>
+              </div>
+
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="x_panel" style="padding-top:20px;">
+                    <div class="x_content">
+
+                      <div class="row" style="margin:0">
+                        <!--    <h4 class="label_add-new-visitor">Search Visitor</h4> --->
+                        <div class="x_panel" style="padding:12px 5px 4px">
+
+                          <form class="form-inline search-visitor-field">
+                            <h4 class="label-filter">
+                              <i class="fa fa-filter"></i>Filter</h4>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" id="inputSuccess950" placeholder="Name">
+                            </div>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" id="inputSuccess951" placeholder="Profession">
+                            </div>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" id="inputSuccess952" placeholder="Car Number">
+                            </div>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" id="inputSuccess953" placeholder="Block Number">
+                            </div>
+                            <div class="form-group has-feedback">
+                              <input type="text" class="form-control" id="inputSuccess954" placeholder="Flat Number">
+                            </div>
+
+                            <button class="btn btn-success btn-search" style="margin-top:5px;">
+                              <i class="fa fa-search" style="font-size:20px"></i>
+                            </button>
+                          </form>
+                        </div>
+                        <!--- x_panel--->
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <div class="x_panel" style="padding:0">
+
+                            <div class="x_title label-my-documents" style="text-indent:8px;">
+                              <h2 style="font-weight:200;">Resident List</h2>
+
+                              <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content" style="padding:0">
+                              <table class="table common-table">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Profession</th>
+                                    <th>Block & Flat No.</th>
+                                    <th>Mobile Number</th>
+                                    <th>Car Number</th>
+                                    <th>
+                                      <i class="fa fa-eye" style="text-indent:14px;"></i>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>V.S Prasad</th>
+                                    <td>Entrepreneur</td>
+                                    <td>II, 7B</td>
+                                    <td>+91 888 888 8888</td>
+                                    <td>WB-02AB 1111
+                                      <br/>WB-02AB 2222
+                                    </td>
+                                    <td>
+                                      <button type="button" class="btn btn-success btn-xs">
+                                        &nbsp View &nbsp
+                                      </button>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>V.S Prasad</th>
+                                    <td>Entrepreneur</td>
+                                    <td>II, 7B</td>
+                                    <td>+91 888 888 8888</td>
+                                    <td>WB-02AB 1111
+                                      <br/>WB-02AB 2222
+                                    </td>
+                                    <td>
+                                      <button type="button" class="btn btn-success btn-xs">
+                                        &nbsp View &nbsp
+                                      </button>
+                                    </td>
+                                  </tr>
+                                </tr>
+                                <td colspan="6" class="text-center">
+                                  <button type="button" class="btn btn-success btn-md">
+                                    Add Resident
+                                  </button>
+                                  &nbsp &nbsp &nbsp &nbsp
+                                  <button class="btn btn-primary btn-md">Import Residents</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <!-- x-content -->
+                      </div>
+                      <!-- x_panel -->
+                    </div>
+                  </div>
+
+                </div>
+                <!-- x-content -->
+              </div>
+              <!-- x_panel -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <!--
+                        <footer>
+                            <div class="pull-right">
+                                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </footer>
+                        -->
+        <!-- /footer content -->
+        <!-- right_col -->
+
+        <!-- <div id="custom_notifications" class="custom-notifications dsp_none">
+                    <ul class="list-unstyled notifications clearfix" data-tabbed-notifications="notif-group"></ul>
+                    <div class="clearfix"></div>
+                    <div id="notif-group" class="tabbed_notifications"></div>
+                </div> -->
+      </div>
+      <!-- main container -->
+    </div>
+    <!-- container body -->
+
+    <%- include('../common/javascripts'); %>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var maxLength = 230;
+        $(".show-read-more").each(function() {
+          var myStr = $(this).text();
+          if ($.trim(myStr).length > maxLength) {
+            var newStr = myStr.substring(0, maxLength);
+            var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+            $(this).empty().html(newStr);
+            $(this).append(' <a href="javascript:void(0);" class="read-more">Read More</a>');
+            $(this).append('<span class="more-text">' + removedStr + '</span>');
+          }
+        });
+        $(".read-more").click(function() {
+          $(this).siblings(".more-text").contents().unwrap();
+          $(this).remove();
+        });
+
+        // POST new notice
+        var postNewNotice = function() {
+          $.ajax({
+            url: "/admin/notices",
+            method: "POST",
+            data: {
+              subject: $("#notice-subject").val(),
+              content: $("#notice-desc").val(),
+              // societyId: '123456789'
+            },
+            success: function(result) {
+              if (result.error) {
+                alert('oops')
+              } else {
+                alert('yaay')
+              }
+            }
+          });
+        };
+        $("#add-new-notice-btn").click(function(e) {
+          postNewNotice();
+          $("#modal-add-notice").modal('hide');
+        })
+      });
+    </script>
+
+    <!-- PNotify -->
+    <!--
+            <script>
+      $(document).ready(function() {
+        new PNotify({
+          title: "PNotify",
+          type: "info",
+          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+          nonblock: {
+              nonblock: true
+          },
+          addclass: 'dark',
+          styling: 'bootstrap3',
+          hide: false,
+          before_close: function(PNotify) {
+            PNotify.update({
+              title: PNotify.options.title + " - Enjoy your Stay",
+              before_close: null
+            });
+
+            PNotify.queueRemove();
+
+            return false;
+          }
+        });
+
+      });
+            </script>
+          -->
+    <!-- PNotify -->
+
+    <!-- Custom Notification -->
+    <script>
+      $(document).ready(function() {
+        var cnt = 10;
+
+        TabbedNotification = function(options) {
+          var message = "<div id='ntf" + cnt + "' class='text alert-" + options.type + "' style='display:none'><h2><i class='fa fa-bell'></i> " + options.title + "</h2><div class='close'><a href='javascript:;' class='notification_close'><i class='fa fa-close'></i></a></div><p>" + options.text + "</p></div>";
+
+          if (!document.getElementById('custom_notifications')) {
+            alert('doesnt exists');
+          } else {
+            $('#custom_notifications ul.notifications').append("<li><a id='ntlink" + cnt + "' class='alert-" + options.type + "' href='#ntf" + cnt + "'><i class='fa fa-bell animated shake'></i></a></li>");
+            $('#custom_notifications #notif-group').append(message);
+            cnt++;
+            CustomTabs(options);
+          }
+        };
+
+        CustomTabs = function(options) {
+          $('.tabbed_notifications > div').hide();
+          $('.tabbed_notifications > div:first-of-type').show();
+          $('#custom_notifications').removeClass('dsp_none');
+          $('.notifications a').click(function(e) {
+            e.preventDefault();
+            var $this = $(this),
+              tabbed_notifications = '#' + $this.parents('.notifications').data('tabbed_notifications'),
+              others = $this.closest('li').siblings().children('a'),
+              target = $this.attr('href');
+            others.removeClass('active');
+            $this.addClass('active');
+            $(tabbed_notifications).children('div').hide();
+            $(target).show();
+          });
+        };
+
+        CustomTabs();
+
+        var tabid = idname = '';
+
+        $(document).on('click', '.notification_close', function(e) {
+          idname = $(this).parent().parent().attr("id");
+          tabid = idname.substr(-2);
+          $('#ntf' + tabid).remove();
+          $('#ntlink' + tabid).parent().remove();
+          $('.notifications a').first().addClass('active');
+          $('#notif-group div').first().css('display', 'block');
+        });
+      });
+    </script>
+    <!-- /Custom Notification -->
+  </body>
+</html>

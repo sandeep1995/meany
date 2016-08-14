@@ -1,0 +1,22 @@
+{
+  "name": "public",
+  "authors": [
+    "Sayan Chakrabarti <s26c.sayan@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "^4.17.37",
+    "vue": "^1.0.26",
+    "aws-sdk": "^2.4.13"
+  }
+}

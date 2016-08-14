@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+    <%- include('../common/stylesheets'); %>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+
+        <!-- page content -->
+
+        <div class="right_col" role="main">
+
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%">
+                <h3>
+                  <i class="fa fa-newspaper-o classified-icon"></i>Classified Ads</h3>
+              </div>
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+              <div class="clearfix"></div>
+
+              <div class="x_panel" style="padding:12px 5px 7px">
+                <form class="form-inline search-visitor-field">
+                  <h4 class="label-filter">
+                    <i class="fa fa-filter"></i>Filter</h4>
+                  <div class="form-group">
+                    <select class="form-control" name="category">
+                      <option selected disabled>Category</option>
+                      <% categoryList.forEach(function (cat) { %>
+                        <option <%= (query.category == cat) ? 'selected' : '' %>><%= cat %></option>
+                      <% }); %>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <select class="form-control" name="isOffering">
+                      <option selected disabled>Buy/Sell</option>
+                      <option value="0" <%= (query.isOffering == "0") ? 'selected' : '' %>>I'm Buying</option>
+                      <option value="1" <%= (query.isOffering == '1') ? 'selected' : '' %>>I'm Selling</option>
+                    </select>
+                  </div>
+
+                  <h4 class="label-filter">Price</h4>
+                  <div class="form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess850" placeholder="Minimum" name="minprice" value="<%= (query === undefined || query.minprice === undefined) ? '' : query.minprice; %>">
+                  </div>
+                  <div class="form-group has-feedback">
+                    <input type="text" class="form-control" id="inputSuccess851" placeholder="Maximum" name="maxprice" value="<%= (query === undefined || query.maxprice === undefined) ? '' : query.maxprice; %>">
+                  </div>
+                  <button class="btn btn-success btn-search" style="margin-top:5px;">
+                    <i class="fa fa-search" style="font-size:20px"></i>
+                  </button>
+
+                  <button id="my-ads-btn" class="btn btn-primary btn-search" style="margin-top:5px;">My Ads</button>
+
+                  <button id="post-new-ad-btn" class="btn btn-success btn-search" style="margin-top:5px;">Post New Ad</button>
+                </form>
+              </div>
+              <!--- x_panel--->
+
+              <% data.forEach(function (ad) { %>
+                <% if (ad.approvalStatus == "Approved") { %>
+                <div class="x_panel" style="padding:23px 25px;">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <div class="card card-block">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                          <div class="product-image classified-image">
+                            <img src="/images/prod-1.jpg" alt="..."/>
+                          </div>
+                          <div class="product_gallery classified_gallery">
+                            <a>
+                              <img src="/images/prod-2.jpg" alt="..."/>
+                            </a>
+                            <a>
+                              <img src="/images/prod-3.jpg" alt="..."/>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 classified-details">
+                          <h3><%= ad.title %></h3>
+                          <div class="row">
+                            <div class="col-xs-6">
+                              <h4>Category:
+                                <span><%= ad.category %></span>
+                              </h4>
+                            </div>
+                            <div class="col-xs-6">
+                              <h4 style="text-align:right; margin-top:12px;">Price:
+                                <span>₹
+                                  <%= ad.price %></span>
+                              </h4>
+                            </div>
+                          </div>
+                          <h4>
+                            <span class="classified-description"><%= ad.details %></span>
+                          </h4>
+                        </div>
+
+                        <button class="btn btn-success btn-search" data-toggle="modal" data-target="#contact-poster-modal-<%= ad.id %>" style="margin-top:10px;float:right">Contact Poster</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="contact-poster-modal-<%= ad.id %>" class="modal fade bs9-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel3">Contact Person</h4>
+                      </div>
+                      <div class="modal-body" style="padding-bottom:0">
+                        <div class="row">
+                          <div class="col-md-12 col-sm-12 col-xs-12 classified-details">
+                            <h4>Name:
+                              <span><%= ad.addedBy.name %></span>
+                            </h4>
+                            <h4>Phone No:
+                              <span><%= ad.contactPhone %></span>
+                            </h4>
+                            <h4>Email:
+                              <span><%= ad.contactEmail %></span>
+                            </h4>
+                          </div>
+                        </div>
+                        <!-- notice-modal -->
+                      </div>
+                      <!-- modal-body -->
+
+                    </div>
+                    <!-- modal-content -->
+                  </div>
+                </div>
+                <% } %>
+              <% }); %>
+              <!-- x_panel  -->
+
+
+            </div>
+
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <!--
+                        <footer>
+                            <div class="pull-right">
+                                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </footer>
+                        -->
+            <!-- /footer content -->
+            <!-- right_col -->
+
+            <!-- <div id="custom_notifications" class="custom-notifications dsp_none">
+                    <ul class="list-unstyled notifications clearfix" data-tabbed-notifications="notif-group"></ul>
+                    <div class="clearfix"></div>
+                    <div id="notif-group" class="tabbed_notifications"></div>
+                </div> -->
+          </div>
+          <!-- main container -->
+        </div>
+        <!-- container body -->
+
+        <%- include('../common/javascripts'); %>
+
+        <script type="text/javascript">
+          $(document).ready(function() {
+            var maxLength = 230;
+            $(".show-read-more").each(function() {
+              var myStr = $(this).text();
+              if ($.trim(myStr).length > maxLength) {
+                var newStr = myStr.substring(0, maxLength);
+                var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                $(this).empty().html(newStr);
+                $(this).append(' <a href="javascript:void(0);" class="read-more">Read More</a>');
+                $(this).append('<span class="more-text">' + removedStr + '</span>');
+              }
+            });
+            $(".read-more").click(function() {
+              $(this).siblings(".more-text").contents().unwrap();
+              $(this).remove();
+            });
+
+            $("#post-new-ad-btn").click(function (e) {
+              e.preventDefault();
+              window.location.href = "/classified/add";
+            })
+            $("#my-ads-btn").click(function (e) {
+              e.preventDefault();
+              window.location.href = "/classified/myads";
+            })
+          });
+        </script>
+
+        <!-- PNotify
+            <script>
+      $(document).ready(function() {
+        new PNotify({
+          title: "PNotify",
+          type: "info",
+          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+          nonblock: {
+              nonblock: true
+          },
+          addclass: 'dark',
+          styling: 'bootstrap3',
+          hide: false,
+          before_close: function(PNotify) {
+            PNotify.update({
+              title: PNotify.options.title + " - Enjoy your Stay",
+              before_close: null
+            });
+
+            PNotify.queueRemove();
+
+            return false;
+          }
+        });
+
+      });
+            </script>
+           <!-- PNotify -->
+
+        <!-- Custom Notification -->
+        <script>
+          $(document).ready(function() {
+            var cnt = 10;
+
+            TabbedNotification = function(options) {
+              var message = "<div id='ntf" + cnt + "' class='text alert-" + options.type + "' style='display:none'><h2><i class='fa fa-bell'></i> " + options.title + "</h2><div class='close'><a href='javascript:;' class='notification_close'><i class='fa fa-close'></i></a></div><p>" + options.text + "</p></div>";
+
+              if (!document.getElementById('custom_notifications')) {
+                alert('doesnt exists');
+              } else {
+                $('#custom_notifications ul.notifications').append("<li><a id='ntlink" + cnt + "' class='alert-" + options.type + "' href='#ntf" + cnt + "'><i class='fa fa-bell animated shake'></i></a></li>");
+                $('#custom_notifications #notif-group').append(message);
+                cnt++;
+                CustomTabs(options);
+              }
+            };
+
+            CustomTabs = function(options) {
+              $('.tabbed_notifications > div').hide();
+              $('.tabbed_notifications > div:first-of-type').show();
+              $('#custom_notifications').removeClass('dsp_none');
+              $('.notifications a').click(function(e) {
+                e.preventDefault();
+                var $this = $(this),
+                  tabbed_notifications = '#' + $this.parents('.notifications').data('tabbed_notifications'),
+                  others = $this.closest('li').siblings().children('a'),
+                  target = $this.attr('href');
+                others.removeClass('active');
+                $this.addClass('active');
+                $(tabbed_notifications).children('div').hide();
+                $(target).show();
+              });
+            };
+
+            CustomTabs();
+
+            var tabid = idname = '';
+
+            $(document).on('click', '.notification_close', function(e) {
+              idname = $(this).parent().parent().attr("id");
+              tabid = idname.substr(-2);
+              $('#ntf' + tabid).remove();
+              $('#ntlink' + tabid).parent().remove();
+              $('.notifications a').first().addClass('active');
+              $('#notif-group div').first().css('display', 'block');
+            });
+          });
+        </script>
+        <!-- /Custom Notification -->
+      </body>
+    </html>

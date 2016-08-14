@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Societies</title>
+  <%- include('../common/stylesheets'); %>
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+      <%- include('../common/super-navigation'); %>
+
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3><i class="fa fa-building manage-societies"></i>Manage Societies</h3> </div>
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 pull-right">
+                  <a class="btn btn-success" href="superadmin/add" style="float:right"> <i class="fa fa-plus-circle" style="padding-right:8px;"></i>Add New Society</a>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <% if (error){%>
+              <div class="row">
+                <h3><%=message %></h3> </div>
+              <%}if (data.length==0){%>
+                <div class="row">
+                  <div class="x_panel">
+                    <h3>Add a society to see it here</h3>
+                  </div>
+                </div>
+                <%}else{%>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <div class="x_panel" style="padding:20px 17px;">
+                        <div class="x_content">
+                          <div class="row">
+                            <% for (var i=0; i < data.length; i++){%>
+                              <a href="/superadmin/society/<%= data[i].id; %>">
+                              <div class="col-md-4 col-sm-4 col-xs-12 profile_details society_summary">
+                                <div class="well profile_view">
+                                  <div class="col-sm-12">
+                                    <h2><%=data[i].societyName %></h2>
+                                    <div class="col-xs-12" style="padding:6px;">
+                                      <ul class="list-unstyled">
+                                        <li><i class="fa fa-building"></i> <strong>Address:</strong>
+                                          <%=data[i].societyAddress %>
+                                        </li>
+                                        <li><i class="fa fa-group"></i> <strong>Member Since:</strong>
+                                          <%=data[i].joinDate %>
+                                        </li>
+                                        <li><i class="fa fa-mobile"></i> <strong>Contact:</strong> +91
+                                          <%=data[i].contactPhone %>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div class="col-xs-12"> <button type="button" class="btn <%=(data[i].status=='active') ? 'btn-success': 'btn-inactive'; %> btn-block" style="text-transform: capitalize;"><%=data[i].status %></button> </div>
+                                </div>
+                              </div>
+                            </a>
+                              <%}%>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <%}%>
+          </div>
+        </div>
+        <%- include('../common/javascripts'); %>
+</body>
+
+</html>

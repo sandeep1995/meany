@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Emergency Contact</title>
+
+<%- include('../common/stylesheets'); %>
+ <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+ <style type="text/css">
+     .fa-trash {
+        cursor: pointer;
+     }
+ </style>
+</head>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+        
+        <!-- page content -->
+
+   <div class="right_col" role="main">
+                    <div class="">
+                        <div class="page-title">
+                            <div class="title_left" style="width:100%">
+                                <h3><i class="fa fa-eye eye-icon"></i>Frequent Visitors</h3>
+                            </div>
+                            <!--
+                            <div class="title_right">
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control search-resident" placeholder="Search Residents">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default search_btn" type="button"><i class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div> <!-- title right -->
+                        </div> <!-- page title -->
+
+                        <div class="clearfix"></div>
+
+                        <div class="">
+              
+                            <div class="clearfix"></div>
+                            
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="x_panel">
+                                        <div class="x_content">
+                                            
+                                            <div class="row" style="margin:0">
+                                                <h4 class="label_add-new-visitor">Add New Visitor</h4>
+                                              <div class="x_panel" style="padding:12px 5px 10px">
+                                                <form class="form-label-left input_mask" id="addVisitorForm">
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    
+                                                    
+                                                        <div class="col-xs-12 form-group has-feedback">
+                                                            <label>Full Name</label>
+                                                            <input type="text" class="form-control has-feedback-left" name="name" id="name" placeholder="Enter Name" required>
+                                                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                        </div>
+                                                   
+                                                </div>
+                                                
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    
+                                                    
+                                                        <div class="col-xs-12 form-group has-feedback">
+                                                            <label>Mobile Number</label>
+                                                            <input type="number" class="form-control has-feedback-left" name="contactPhone" id="contactPhone" placeholder="Enter Number" required>
+                                                            <span class="fa fa-mobile-phone form-control-feedback left" aria-hidden="true" style="font-size:18px; top:23px;"></span>
+                                                        </div>
+                                                    
+                                                </div>
+                                                
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    
+                                                    
+                                                        <div class="col-xs-12 form-group has-feedback">
+                                                            <label>Valid Upto</label>
+                                                            <input type="text" class="form-control has-feedback-left" name="expiryDate" id="expiryDate" placeholder="Enter Date" required>
+                                                            <span class="fa fa-calendar form-control-feedback left" aria-hidden="true" style="top:23px;"></span>
+                                                        </div>
+                                                  
+                                                </div>
+                                                
+                                                <div class="col-md-3 col-sm-3 col-xs-12 add-visitor-btn">
+                                                    <button class="btn btn-primary" onclick="$('#addVisitorForm').reset();" type="reset">Clear</button> &nbsp; <button class="btn btn-success"  id="addButton" type="submit">Add</button>
+                                                </div>
+                                              </form>
+                                              </div>  <!--- x_panel- -->
+                                            </div>
+
+                                            <% if ( error ) { %>
+
+                                            <div class="row">
+                                                <h3><%= message %></h3>
+                                            </div>
+
+                                            <% } if (data.length == 0) { %>
+                                             <div class="row">
+                                                <h3>Nothing found</h3>
+                                            </div>
+                                            <% }
+                                            if (!error && data.length > 0)
+                                            { %>
+                                            
+                                            <div class="row">
+                                                <h4 class="label_visitors-list">Visitors List</h4>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div class="x_panel">
+                                                       <ul class="list-unstyled visitor-list">
+                                                     <%  for ( var i = 0; i < Math.ceil(data.length/2); i++) { %>
+                                                        <li id="<%= data[i].id %>" data-name="<%= data[i].name %>"  data-expirydate="<%= data[i].expiryDate %>" data-contact="<%= data[i].contactPhone %>">
+
+                                                                <div class="row">
+                                                                    <div class="col-md-9 col-sm-9 col-xs-10 visitor-name">
+                                                                        <h5 ><%= data[i].name %>
+                                                                        <small> (Valid Upto: <%= data[i].expiryDate %> )</small></h5>
+                                                                        <p ><i class="fa fa-mobile-phone"></i>+91 <%= data[i].contactPhone %></p>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-3 col-xs-2 edit-visitor-list">
+                                                                        <!-- <i class="fa fa-edit" onclick="edit('<%= data[i].id %>')"></i> &nbsp; &nbsp; -->
+                                                                        <i class="fa fa-trash" onclick="remove('<%= data[i].id %>')"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                       <% } %>
+                                                       </ul>
+                                                     </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                            <div class="x_panel">
+                                                       <ul class="list-unstyled visitor-list">
+                                                     <%  for ( var i = Math.ceil(data.length/2); i < data.length; i++) { %>
+                                                        <li id="<%= data[i].id %>" data-name="<%= data[i].name %>"  data-expirydate="<%= data[i].expiryDate %>" data-contact="<%= data[i].contactPhone %>">
+
+                                                                <div class="row">
+                                                                    <div class="col-md-9 col-sm-9 col-xs-10 visitor-name">
+                                                                        <h5 ><%= data[i].name %>
+                                                                        <small> (Valid Upto: <%= data[i].expiryDate %> )</small></h5>
+                                                                        <p ><i class="fa fa-mobile-phone"></i>+91 <%= data[i].contactPhone %></p>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-3 col-xs-2 edit-visitor-list">
+                                                                       <!--  <i class="fa fa-edit" onclick="edit('<%= data[i].id %>')"></i> &nbsp; &nbsp; -->
+                                                                        <i class="fa fa-trash"  onclick="remove('<%= data[i].id %>')"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                       <% } %>
+                                                       </ul>
+                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <% } %>
+                                        
+                                        </div> <!-- x_content -->
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+
+
+                <!-- /page content -->
+            </div>
+        </div>
+        <!-- right_col -->
+
+        <div id="custom_notifications" class="custom-notifications dsp_none">
+            <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group"></ul>
+            <div class="clearfix"></div>
+            <div id="notif-group" class="tabbed_notifications"></div>
+        </div>
+    </div>
+    <!-- main container -->
+</div>
+<!-- container body -->
+<script src="/vendors/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="/vendors/fastclick/lib/fastclick.js"></script>
+<!-- NProgress -->
+<script src="/vendors/nprogress/nprogress.js"></script>
+<!-- bootstrap-progressbar -->
+<script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+<!-- iCheck -->
+<script src="/vendors/iCheck/icheck.min.js"></script>
+<!-- PNotify -->
+<script src="/vendors/pnotify/dist/pnotify.js"></script>
+<script src="/vendors/pnotify/dist/pnotify.buttons.js"></script>
+<script src="/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+<script type="text/javascript" src="/vendors/serializejson.min.js"></script>
+
+<!-- Custom Theme Scripts -->
+<script src="/js/custom.min.js"></script>
+<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript">
+
+    function remove(id) {
+        console.log(id);
+        $.ajax({
+                url: '/visitors',
+                method: 'DELETE',
+                data: {id: id},
+                success: function (data) {
+                    if (!data.error) {
+                        window.location.reload();
+                    }
+                }
+            });
+    }
+
+     $(function () {
+        $('#expiryDate').datetimepicker();
+
+        $('#addVisitorForm').submit(function (e) {
+
+            e.preventDefault();
+            $('#addButton').prop('disabled', true);
+            var formdata = $(this).serializeJSON();
+            console.log(formdata);
+            $.ajax({
+                url: '/visitors',
+                method: 'POST',
+                data: formdata,
+                success: function (data) {
+                    if (!data.error) {
+                        window.location.reload();
+                    }
+                }
+            });
+
+        });
+     });
+
+
+</script>
+
+</body>
+</html>

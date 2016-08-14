@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+    <%- include('../common/stylesheets'); %>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+      
+
+        <!-- page content -->
+
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%;">
+                <h3>
+                  <i class="fa fa-bar-chart opinion-icon"></i>Opinion Poll</h3>
+              </div>
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="x_panel" style="border-radius:0; padding:23px 25px;">
+
+                <div class="x_panel opinion-poll-wrapper">
+                  <!--   <div class="x_title">
+
+                            </div> -->
+
+                  <% if (error) { %>
+                    <h3>
+                      <%= message %>
+                    </h3>
+                  <% } else if (!error && data.length == 0) { %>
+                    <h2 class="jumbotron text-center">
+                      No Polls found
+                    </h2>
+                  <% } else { %>
+                    <% for ( var i = 0; i < data.length; i++) { %>
+                      <%
+                        var isPollActive = function () {
+                          var now = new Date();
+                          if (data[i].pollCloseDate < now)
+                            return false; // poll has closed
+                          var responders = data[i].responses.map(function (resp) {
+                            return String(resp.responsedBy);
+                          });
+                          if (responders.indexOf(String(whoami)) >= 0)
+                            return false;
+                          else {
+                            return true;
+                          }
+                          // return typeof whoami
+                        }
+                      %>
+                      <!-- <%= isPollActive() %> -->
+                      <% if (isPollActive()) { %>  <!-- active poll; allow voting -->
+                        <div class="x_content">
+                          <h2 class="poll-question"><%= data[i].question %></h2>
+                          <hr/>
+                          <% for ( var j = 0; j < data[i].options.length; j++) { %>
+                          <div class="radio">
+                            <label>
+                              <input type="radio" class="flat" name="option-selected-<%= data[i]._id %>" value="<%= j %>">
+                              <%= data[i].options[j] %>
+                            </label>
+                          </div>
+                          <% } %>
+
+
+                          <hr/>
+                          <div class="text-center opinion-submit" >
+                            <button class="btn btn-success submit-opinion-btn" style='margin-top: 0px;' data-poll-id="<%= data[i]._id %>">Submit</button>
+                          </div>
+                        </div>
+                      <% } else { %>  <!-- completed/expired poll; just show results -->
+                        <div class="x_content" style="margin-bottom:20px">
+                          <h2 class="poll-question"><%= data[i].question %></h2>
+                          <div class="poll-result-wrapper">
+                            <% for ( var j = 0; j < data[i].options.length; j++) { %>
+                              <% var responses = data[i].responses; var cnt = 0; for(var k=0; k < responses.length; k++) { if (responses[k]["optionSelected"] == j) cnt ++; } var perc = (cnt / responses.length) * 100; %>
+                              <div class="progress for-admin">
+                                <div class="progress-bar most-selected" data-transitiongoal="<%= perc %>">
+                                  <span><%= perc %>%</span>
+                                </div>
+                              </div>
+                              <p class="poll-detail">
+                                <span>
+
+                                  <%= cnt %>
+
+                                  Members said</span>
+                                <%= data[i].options[j] %>
+                              </p>
+                            <% } %>
+                            <!-- end for loop j -->
+                          </div>
+                          <!-- poll-result-wrapper  -->
+                        </div>
+                      <% } %>
+                      <!-- end if/else -->
+
+                    <% } %>
+                    <!-- end for loop i -->
+
+                  <% } %>
+                </div>
+              </div>
+              <!-- x_panel -->
+
+            </div>
+
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <!--
+                        <footer>
+                            <div class="pull-right">
+                                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </footer>
+                        -->
+            <!-- /footer content -->
+            <!-- right_col -->
+
+            <!-- <div id="custom_notifications" class="custom-notifications dsp_none">
+                    <ul class="list-unstyled notifications clearfix" data-tabbed-notifications="notif-group"></ul>
+                    <div class="clearfix"></div>
+                    <div id="notif-group" class="tabbed_notifications"></div>
+                </div> -->
+          </div>
+          <!-- main container -->
+        </div>
+        <!-- container body -->
+
+        <%- include('../common/javascripts'); %>
+
+        <script type="text/javascript">
+          $(".submit-opinion-btn").click(function () {
+            var pollId = $(this).data('poll-id');
+            var optionSelected = $("input[name='option-selected-"+pollId+"']:checked").val();
+
+            console.log('submitting poll opinion....'+pollId+'---'+optionSelected);
+
+            $.ajax({
+              url: "/polls",
+              method: "POST",
+              data: {
+                pollId: pollId,
+                optionSelected: optionSelected
+                // societyId: '123456789'
+              },
+              success: function (result) {
+                if (result.error) {
+                  alert('oops')
+                  console.log(result.message);
+                } else {
+                  // alert('yaay')
+                  window.location.reload();
+                }
+              }
+            });
+          })
+
+        </script>
+
+        <!-- PNotify
+            <script>
+      $(document).ready(function() {
+        new PNotify({
+          title: "PNotify",
+          type: "info",
+          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+          nonblock: {
+              nonblock: true
+          },
+          addclass: 'dark',
+          styling: 'bootstrap3',
+          hide: false,
+          before_close: function(PNotify) {
+            PNotify.update({
+              title: PNotify.options.title + " - Enjoy your Stay",
+              before_close: null
+            });
+
+            PNotify.queueRemove();
+
+            return false;
+          }
+        });
+
+      });
+            </script>
+           <!-- PNotify -->
+
+        <!-- Custom Notification -->
+        <script>
+          $(document).ready(function() {
+            var cnt = 10;
+
+            TabbedNotification = function(options) {
+              var message = "<div id='ntf" + cnt + "' class='text alert-" + options.type + "' style='display:none'><h2><i class='fa fa-bell'></i> " + options.title + "</h2><div class='close'><a href='javascript:;' class='notification_close'><i class='fa fa-close'></i></a></div><p>" + options.text + "</p></div>";
+
+              if (!document.getElementById('custom_notifications')) {
+                alert('doesnt exists');
+              } else {
+                $('#custom_notifications ul.notifications').append("<li><a id='ntlink" + cnt + "' class='alert-" + options.type + "' href='#ntf" + cnt + "'><i class='fa fa-bell animated shake'></i></a></li>");
+                $('#custom_notifications #notif-group').append(message);
+                cnt++;
+                CustomTabs(options);
+              }
+            };
+
+            CustomTabs = function(options) {
+              $('.tabbed_notifications > div').hide();
+              $('.tabbed_notifications > div:first-of-type').show();
+              $('#custom_notifications').removeClass('dsp_none');
+              $('.notifications a').click(function(e) {
+                e.preventDefault();
+                var $this = $(this),
+                  tabbed_notifications = '#' + $this.parents('.notifications').data('tabbed_notifications'),
+                  others = $this.closest('li').siblings().children('a'),
+                  target = $this.attr('href');
+                others.removeClass('active');
+                $this.addClass('active');
+                $(tabbed_notifications).children('div').hide();
+                $(target).show();
+              });
+            };
+
+            CustomTabs();
+
+            var tabid = idname = '';
+
+            $(document).on('click', '.notification_close', function(e) {
+              idname = $(this).parent().parent().attr("id");
+              tabid = idname.substr(-2);
+              $('#ntf' + tabid).remove();
+              $('#ntlink' + tabid).parent().remove();
+              $('.notifications a').first().addClass('active');
+              $('#notif-group div').first().css('display', 'block');
+            });
+          });
+        </script>
+        <!-- /Custom Notification -->
+      </body>
+    </html>

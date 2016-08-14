@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Societies</title>
+  <%- include('../common/stylesheets'); %>
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+      <%- include('../common/super-navigation'); %>
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:50%">
+                <h3><i class="fa fa-building manage-societies"></i>Add a society</h3> </div>
+              <div class="title_right" style="width:50%">
+                <div class="col-lg-4 col-md-5 col-sm-5 col-xs-12" style="float:right"> <a class="cancel-info_admin" href="/superadmin"><i class="fa fa-close"></i>Cancel</a>
+                  <p id="save-btn" class="save-info_admin"><i class="fa fa-save"></i>Save</p> </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="x_panel" style="padding:20px 17px;">
+                  <div class="x_content">
+                    <form id="add-society-form">
+                      <div class="row">
+                        <div class="col-md-4 col-sm-4 col-xs-12 society-data">
+                          <div class="x_panel">
+                            <p class="thin-border">Basic Info</p>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="societyName" placeholder="Society Name"> </div>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="societyAddress" placeholder="Society Address"> </div>
+
+
+                            <select  class="form-control" name="status">
+                              <option disabled selected>Select status</option>
+                              <option value="active">Active</option>
+                              <option value="inactive">Inactive</option>
+                            </select>
+                            <br>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="contactPerson" placeholder="Contact Person"> </div>
+                            <div class="form-group has-feedback"> <input  required type="email" class="form-control" name="contactEmail" placeholder="Enter Email"> </div>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="website" placeholder="Enter Website"> </div>
+                            <div class="form-group has-feedback"> <input  required type="number" class="form-control" name="contactPhone" placeholder="Contact Number"> </div>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="approvedPAX" placeholder="Approved PAX"> </div>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="merchId" placeholder="Merchant ID"> </div>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="merchKey" placeholder="Merchant Key"> </div>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="merchSalt" placeholder="Merchant Salt"> </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12 society-data">
+                          <div class="x_panel">
+                            <p class="thin-border">Modules</p>
+                            <div class="checkbox select-modules"> <label> <input value=true required name="modulesSubscribed[payments]" type="checkbox" class="flat"> Bill Payments</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[members]" type="checkbox" class="flat"> Board Of Members</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[classifieds]" type="checkbox" class="flat"> Classifieds</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[contacts]" type="checkbox" class="flat"> Emergency Contacts</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[visitors]" type="checkbox" class="flat"> Frequent Visitors</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[notices]" type="checkbox" class="flat"> Notices</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[polls]" type="checkbox" class="flat"> Opinion Polls</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[documents]" type="checkbox" class="flat"> Resident Documents</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[employees]" type="checkbox" class="flat"> Resident Employees</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[residents]" type="checkbox" class="flat"> Search Residents</label> </div>
+                            <div class="checkbox select-modules"> <label> <input value=true  required name="modulesSubscribed[services]" type="checkbox" class="flat"> Services</label> </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                          <div class="x_panel">
+                            <p class="label_admin-info">Admin Info</p>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="admin[name]" placeholder="Enter Name"> </div>
+                            <div class="form-group has-feedback"> <input  required type="text" class="form-control" name="admin[contactPhone]" placeholder="Enter Number"> </div>
+                            <div class="form-group has-feedback"> <input  required type="email" class="form-control" name="admin[contactEmail]" placeholder="Enter Email"> </div>
+                            <div class="form-group has-feedback"> <input  required type="password" class="form-control" name="admin[password]" placeholder="Enter Password"> </div>
+                            <select  class="form-control" name="admin[status]">
+                              <option disabled selected>Select status</option>
+                              <option value="active">Active</option>
+                              <option value="inactive">Inactive</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </form><br/>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%- include('../common/javascripts'); %>
+        <script type="text/javascript">
+
+          $('#save-btn').click(function () {
+            $(this).prop('disabled', true);
+
+            var formData = $('#add-society-form').serializeJSON({
+              parseBooleans: true,
+              checkboxUncheckedValue: false
+            });
+
+            console.log(formData);
+
+            $.ajax({
+              url: '/superadmin/add',
+              method: 'POST',
+              data: formData,
+              success: function (data) {
+                if (!data.error) {
+                  $('#add-society-form')[0].reset();
+                  alert('Successfully saved');
+                } else {
+                  alert(data.message);
+                }
+              }
+            });
+
+          });
+
+        </script>
+
+</body>
+
+</html>

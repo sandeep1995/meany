@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+    <%- include('../common/stylesheets'); %>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+
+        <!-- page content -->
+
+        <div class="right_col" role="main">
+
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:70%">
+                <h3>
+                  <i class="fa fa-newspaper-o classified-icon"></i>Classified Ads</h3>
+              </div>
+              <div class="title_right" style="width:30%;">
+                <div class="col-xs-12 pull-right">
+                  <button id="post-new-ad-btn" class="btn btn-success" style="float:right">
+                    <i class="fa fa-plus-circle" style="padding-right:8px;"></i>Post New Add</button>
+                </div>
+              </div>
+              <!-- title right -->
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+              <div class="clearfix"></div>
+
+              <% data.forEach(function (ad) { %>
+                <div class="x_panel" style="padding:23px 25px;">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <div class="card card-block">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                          <div class="product-image classified-image">
+                            <img src="/images/prod-1.jpg" alt="..."/>
+                          </div>
+                          <div class="product_gallery classified_gallery">
+                            <a>
+                              <img src="/images/prod-2.jpg" alt="..."/>
+                            </a>
+                            <a>
+                              <img src="/images/prod-3.jpg" alt="..."/>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 classified-details">
+                          <h3>
+                          <%= ad.title %>
+                          <% if (ad.approvalStatus == "Approved") { %>
+                            <span class="label label-success pull-right" style="color: white; font-size: 12px; padding: 5px; margin-top: -13px;">Approved!</span>
+                          <% } else if (ad.approvalStatus == "Rejected") { %>
+                            <span class="label label-danger pull-right" style="color: white; font-size: 12px; padding: 5px; margin-top: -13px;">Rejected!</span>
+                          <% } else { %>
+                            <span class="label label-warning pull-right" style="color: white; font-size: 12px; padding: 5px; margin-top: -13px;">Pending!</span>
+                          <% } %>
+                          </h3>
+                          <div class="row">
+                            <div class="col-xs-6">
+                              <h4>Category:
+                                <span><%= ad.category %></span>
+                              </h4>
+                            </div>
+                            <div class="col-xs-6">
+                              <h4 style="text-align:right; margin-top:12px;">Price:
+                                <span>₹
+                                  <%= ad.price %></span>
+                              </h4>
+                            </div>
+                          </div>
+                          <h4>
+                            <span class="classified-description"><%= ad.details %></span>
+                          </h4>
+                        </div>
+
+                        <button id='delete-ad-btn' class="btn btn-dark btn-search" style="margin-top:10px;float:right" onclick="deleteThis(event, '<%= ad.id %>');">Delete</button>
+                        <button id='edit-ad-btn' class="btn btn-dark btn-search" style="margin-top:10px;float:right" onclick="editThis(event, '<%= ad.id %>');">Edit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% }); %>
+              <!-- x_panel  -->
+
+            </div>
+
+            <!-- /page content -->
+
+            <!-- footer content -->
+            <!--
+                        <footer>
+                            <div class="pull-right">
+                                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </footer>
+                        -->
+            <!-- /footer content -->
+            <!-- right_col -->
+
+            <!-- <div id="custom_notifications" class="custom-notifications dsp_none">
+                    <ul class="list-unstyled notifications clearfix" data-tabbed-notifications="notif-group"></ul>
+                    <div class="clearfix"></div>
+                    <div id="notif-group" class="tabbed_notifications"></div>
+                </div> -->
+          </div>
+          <!-- main container -->
+        </div>
+        <!-- container body -->
+
+        <%- include('../common/javascripts'); %>
+
+        <script type="text/javascript">
+
+          $("#post-new-ad-btn").click(function(e) {
+            e.preventDefault();
+            window.location.href = "/classified/add";
+          });
+          var editThis = function(e, adId) {
+            e.preventDefault();
+            // alert('editing...'+adId)
+            window.location.href = "/classified/edit/"+adId;
+          };
+          var deleteThis = function(e, adId) {
+            e.preventDefault();
+            // alert('deleting....'+adId)
+            // window.location.href = "/classified/add";
+            var resp = confirm ("Are you Sure???");
+            if (resp) {
+              $.ajax({
+                url: "/classified/"+adId,
+                method: "DELETE",
+                success: function(result) {
+                  if (result.error) {
+                    alert('oops')
+                  } else {
+                    // alert('yaay');
+                    window.location.href='/classified/myads'
+                  }
+                }
+              });
+            }
+          };
+        </script>
+
+        <!-- /Custom Notification -->
+      </body>
+    </html>

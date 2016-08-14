@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Search</title>
+
+<%- include('../common/stylesheets'); %>
+  <style type="text/css">
+    [v-cloak] { display:none; }
+  </style>
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+     
+      <!-- page content -->
+      <div class="right_col" role="main">
+        <div class="">
+          <div class="page-title">
+            <div class="title_left label-search-visitor-width">
+              <h3><i class="fa fa-group members-icon"></i>Search </h3>
+            </div>
+
+            <div class="title_right">
+              <div class="col-md-6 col-sm-6 col-xs-6">
+                <form method="POST" id="search_form">
+                    <div class="search-resident-dropdown">
+                                        <select onchange="document.getElementById('searchbox').value = ''" name="searchType" class="form-control">
+                                            <option>Search By</option>
+                                            <option value="name">Name</option>
+                                            <option value="contactPhone">Phone Number</option>
+                                            <option value="profession">Profession</option>
+                                            <option value="house">House Number( Flat No, Block )</option>
+                                            <option value="carNumber">Car Number</option>
+                                        </select>
+                                    </div>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-6 form-group pull-right top_search">
+                <div class="input-group">
+                  <input type="text" name="search" class="form-control search-resident" id="searchbox" placeholder="Search Residents">
+                  <span class="input-group-btn">
+                                            <button class="btn btn-default search_btn" type="submit"><i class="fa fa-search"></i></button>
+                                        </span>
+                </div>
+                </form>
+              </div>
+            </div>
+            <!-- title right -->
+          </div>
+          <!-- page title -->
+
+          <div class="clearfix"></div>
+
+          <div class="">
+
+            <div class="clearfix"></div>
+
+            <div class="row" id="result">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+
+                <div class="x_panel" style="padding-top:20px;">
+
+                  <div v-if="!users.length" class="x_content">
+                    <div class="row">
+                    <h3>Use the search box to find residents</h3>
+                    </div>
+                    </div>
+                  <div class="x_content">
+                    <div class="row">
+                      <div v-if="users.length">
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 profile_details" v-for="user in users">
+                          <div class="well profile_view members-detail">
+                            <div class="col-sm-12 side-padding">
+                              <h4 class="brief">{{ user.name }}</h4>
+                              <div class="right col-xs-12 col-sm-5 col-md-5 member-img-padding">
+                                <img src="images/img.jpg" alt="" class="member-img img-responsive">
+                              </div>
+                              <div class="left col-xs-12 col-sm-7 col-md-7 resident-info">
+                                <p>Profession </p>
+                                <h5><b>{{ user.profession }}</b></h5>
+
+                                <hr style="margin-top:5px; margin-bottom:6px;">
+
+                                <ul class="list-unstyled resident-contact">
+                                  <li><i class="fa fa-mobile-phone icon_mobile"></i> {{ user.contactPhone }} </li>
+                                </ul>
+
+                                <hr style="margin-top:0; margin-bottom:8px;">
+
+                                <div class="row resident-info">
+                                  <div class="col-md-6 col-sm-12 vertical-line">
+                                    <p>Block No. </p>
+                                    <h5><b> {{ user.block }}</b></h5>
+                                  </div>
+                                  <div class="col-md-6 col-sm-12">
+                                    <p>Flat No. </p>
+                                    <h5><b>{{ user.flatNo }}</b></h5>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- well profile_view -->
+                        </div>
+                        <!-- profile_details -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- /page content -->
+        </div>
+      </div>
+      <!-- right_col -->
+
+      <div id="custom_notifications" class="custom-notifications dsp_none">
+        <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group"></ul>
+        <div class="clearfix"></div>
+        <div id="notif-group" class="tabbed_notifications"></div>
+      </div>
+    </div>
+    <!-- main container -->
+  </div>
+  <!-- container body -->
+
+  <!-- jQuery -->
+  <script src="/vendors/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- FastClick -->
+  <script src="/vendors/fastclick/lib/fastclick.js"></script>
+  <!-- NProgress -->
+  <script src="/vendors/nprogress/nprogress.js"></script>
+  <!-- bootstrap-progressbar -->
+  <script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+  <!-- iCheck -->
+  <script src="/vendors/iCheck/icheck.min.js"></script>
+  <!-- PNotify -->
+  <script src="/vendors/pnotify/dist/pnotify.js"></script>
+  <script src="/vendors/pnotify/dist/pnotify.buttons.js"></script>
+  <script src="/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+  <script type="text/javascript" src="/vendors/serializejson.min.js"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="/js/custom.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+  <script type="text/javascript">
+    var $search_form = $('#search_form');
+    var vm = new Vue({
+      el: '#result',
+      data: {
+        users: []
+      }
+    });
+    $search_form.submit(function (e) {
+      e.preventDefault();
+      console.log();
+      $.ajax({
+        url: '/search',
+        method: 'POST',
+        data: $(this).serializeJSON(),
+        success: function (data) {
+          console.log(data);
+          if (!data.error) {
+            vm.users = data.data;
+          }
+        },
+        error: function (err) {
+          searchResults = null;
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

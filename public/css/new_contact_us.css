@@ -1,0 +1,85 @@
+/*
+.contact-us-main {
+  margin-left: 20px; 
+} */
+
+.closed-status-row {
+  color: #a5a5ad; 
+}
+  
+ .contact-us-icon  {
+ color:#fff;
+ background:#4d6e8d;
+ border-radius:50%;
+ margin-right:12px;
+ padding:10px;
+ font-size:18px;
+}
+
+.contact_options  {
+   margin-top:20px;
+   margin-bottom:25px;
+}
+
+.contact_options span {
+   display:inline-block;
+   padding-right:25px;
+}
+
+.iradio_flat-green {
+  margin-right:5px;
+ }
+ 
+.re-open-btn {
+ color:#fff;
+ background:#fc8080;
+ margin-bottom:0;
+ font-size:13px;
+ }
+
+.re-open-btn:hover {
+ color:#fff;
+}
+
+.btn-close {
+    background: #26B99A;
+    border: 1px solid #169F85;
+	color:#fff;
+	padding:1px 13px;
+	margin-bottom:0;
+	font-size:13px;
+}
+
+.btn-close:hover  {
+ color:#fff;
+}
+
+.label-my-complaints  {
+ text-indent:17px;
+ padding-top:10px;
+ color:#4f6d8f;
+}
+
+.label-my-complaints h2 {
+ color:#4f6d8f;
+ font-weight:200 !important;
+ }
+
+.complain-table {
+ margin-top:-10px;
+ color:#4f6e8d;
+ font-size:14px;
+ margin-bottom:0;
+}
+
+.complain-table tbody tr:active {
+  background:#def5ef;
+  border-top:2px solid #74d3bf;
+  border-bottom:2px solid #74d3bf;
+}
+
+.complain-table tbody tr:last-child {
+  border-bottom:1px solid #dbdbdb;
+}
+
+/*# sourceMappingURL=new_contact_us.css.map */

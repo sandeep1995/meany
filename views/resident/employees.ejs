@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Employee</title>
+
+    <!-- Bootstrap -->
+    <%- include('../common/stylesheets'); %>
+    <style type="text/css">
+      .fa-trash {
+        cursor: pointer;
+      }
+
+    </style>
+    <!-- AWS SDK -->
+    <script type="text/javascript" src="/bower_components/aws-sdk/dist/aws-sdk.min.js"></script>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+
+        <!-- page content -->
+
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%">
+                <h3>
+                  <i class="fa fa-group employee-list-icon"></i>Employee List</h3>
+              </div>
+
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="x_panel" style="padding-top:5px;">
+                    <div class="x_content">
+                      <div class="row" style="margin:3px 0;">
+                        <h4 class="add-new_label">Add New Employee</h4>
+
+                        <div class="x_panel" style="padding:15px 10px 10px">
+                          <form id="addEmployeeForm">
+
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                              <div class="row">
+
+                                <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+
+                                  <div class="upload-document" style="margin-bottom:5px;">
+                                    <form action="form_upload.html" class="dropzone">
+                                      <input type='file' id='employee-photo' class='file-inp' style="display: none;">
+                                      <div class="dz-default dz-message file-inp-img hover-pointer" style="background: #73879C;">
+                                        <i id="uploading-placeholder" class="fa fa-user-plus" style="color: #eee"></i>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                  <div class="form-group" style="margin-top:10px;">
+                                    <input type="text" class="form-control has-feedback-left" name="name" placeholder="Full Name" required>
+                                    <span class="fa fa-user form-control-feedback left" aria-hidden="true" style="top:9px"></span>
+                                  </br>
+                                  <input type="text" class="form-control has-feedback-left" name="contactPhone" placeholder="Mobile Number" required>
+                                  <span class="fa fa-mobile form-control-feedback left" aria-hidden="true" style="top:61px; font-size:18px"></span>
+                                </div>
+                              </div>
+
+                              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                <div class="form-group" style="margin-top:10px;">
+                                  <select name="gender" class="form-control" required>
+                                    <option disabled selected>Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                  </select>
+                                  <br/>
+                                  <select name="role" class="form-control" required>
+                                    <option disabled selected>Role</option>
+                                    <% employeeTypes.forEach(function (type) { %>
+                                      <option value="<%= type %>"><%= type %></option>
+                                    <% }) %>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                                <div class="form-group" style="margin-top:10px;">
+                                  <input type="text" name="dob" class="form-control has-feedback-left" id="dob" placeholder="Date of Birth" required>
+                                  <span class="fa fa-calendar form-control-feedback left" aria-hidden="true" style="top:9px"></span>
+                                </br>
+                                <input type="text" class="form-control has-feedback-left" name="regularSchedule" placeholder="Regular Schedule like: Every morning" required>
+                                <span class="fa fa-clock-o form-control-feedback left" aria-hidden="true" style="top:61px; "></span>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="text-center">
+                            <button class="btn btn-success add-details-btn" id="addButton" type="submit">Add</button>
+                          </div>
+
+                        </div>
+                      </form>
+                    </div>
+                    <!-- x _panel -->
+                  </div>
+
+                  <% if ( error ) { %>
+
+                    <div class="row">
+                      <h3><%= message %></h3>
+                    </div>
+
+                  <% } if (!error && data.length == 0) { %>
+                  <div class="row">
+                    <h3>Nothing found</h3>
+                  </div>
+                <% }
+                                            if (!error && data.length > 0)
+                                            { %>
+
+                <div class="row">
+                  <h4 class="label_visitors-list">Employee List</h4>
+
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="x_panel">
+                      <ul class="list-unstyled visitor-list">
+                        <%  for ( var i = 0; i < Math.ceil(data.length/2); i++) { %>
+                          <li>
+                            <article class="media event">
+                              <a class="pull-left employee-pic-body">
+                                <img src="<%= data[i].awsProfilePicURL %>" class="employee-pic" onError="this.src= '/images/img.jpg'">
+
+                              </a>
+                              <div class="media-body employee-details">
+                                <h5>
+                                  <b><%= data[i].name %></b>
+                                  -
+                                  <%= data[i].role %>
+                                  (
+                                  <%= data[i].approvalStatus %>
+                                  )</h5>
+                                <p>
+                                  <i class="fa fa-clock-o"></i>
+                                  <%= data[i].regularSchedule %></p>
+
+                                <span class="edit-employee-list">
+
+                                  <i class="fa fa-trash" onclick="remove('<%= data[i].id %>')"></i>
+                                </span>
+                              </div>
+                            </article>
+                          </li>
+                          <br>
+
+                        <% } %>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="x_panel">
+                      <ul class="list-unstyled visitor-list">
+                        <%  for ( var i = Math.ceil(data.length/2); i < data.length; i++) { %>
+                          <li>
+                            <article class="media event">
+                              <a class="pull-left employee-pic-body">
+                                <img src="<%= data[i].awsProfilePicURL %>" class="employee-pic" onError="this.src= '/images/img.jpg'">
+                              </a>
+                              <div class="media-body employee-details">
+                                <h5>
+                                  <b><%= data[i].name %></b>
+                                  -
+                                  <%= data[i].role %>
+                                  (
+                                  <%= data[i].approvalStatus %>
+                                  )</h5>
+                                <p>
+                                  <i class="fa fa-clock-o"></i>
+                                  <%= data[i].regularSchedule %></p>
+
+                                <span class="edit-employee-list">
+
+                                  <i class="fa fa-trash" onclick="remove('<%= data[i].id %>')"></i>
+                                </span>
+                              </div>
+                            </article>
+                          </li>
+                          <br>
+                        <% } %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+              <% } %>
+
+            </div>
+            <!-- x-content -->
+          </div>
+          <!-- x_panel -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- /page content -->
+  </div>
+</div>
+<!-- right_col -->
+
+<div id="custom_notifications" class="custom-notifications dsp_none">
+  <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group"></ul>
+  <div class="clearfix"></div>
+  <div id="notif-group" class="tabbed_notifications"></div>
+</div>
+</div>
+<!-- main container -->
+</div>
+<!-- container body -->
+
+<!-- jQuery -->
+<script src="/vendors/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="/vendors/fastclick/lib/fastclick.js"></script>
+<!-- NProgress -->
+<script src="/vendors/nprogress/nprogress.js"></script>
+<!-- bootstrap-progressbar -->
+<script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+<!-- iCheck -->
+<script src="/vendors/iCheck/icheck.min.js"></script>
+<!-- PNotify -->
+<script src="/vendors/pnotify/dist/pnotify.js"></script>
+<script src="/vendors/pnotify/dist/pnotify.buttons.js"></script>
+<script src="/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+<script type="text/javascript" src="/vendors/serializejson.min.js"></script>
+
+<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<!-- Custom Theme Scripts -->
+<script src="/js/custom.min.js"></script>
+
+<script type="text/javascript">
+$('.file-inp-img').click(function (e) {
+  $(this).prev('.file-inp').click(); // simulate click on input[type=file] when clicking on placeholder phot
+});
+
+$('.file-inp').change(function () { // show preview of selected photo
+  var fileInp = this;
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    the_url = event.target.result
+    $(fileInp).next('.file-inp-img').html("<img class='img img-responsive' src='"+the_url+"'/>")
+  }
+  reader.readAsDataURL(this.files[0]);
+
+})
+
+// AWS Config
+var tempCreds = {
+  accessKeyId: '<%= tempCreds.AccessKeyId %>',
+  secretAccessKey: '<%= tempCreds.SecretAccessKey %>',
+  sessionToken: '<%= tempCreds.SessionToken %>'
+}
+AWS.config.update(tempCreds) ;
+// Configure your region
+AWS.config.region = '<%= awsRegion %>';
+var bucket = new AWS.S3({params: {Bucket: '<%= awsImageBucketName %>'}});
+
+var ulImgToAWS = function (key, file, cb) {
+  if (!file || !key) cb("AWS UL Error: Either no File OR no Key!!", null);
+  var params = {Key: key, ContentType: file.type, Body: file};
+  bucket.upload(params, function (err, data) {
+    if (err) {
+      // alert("Error Uploading File to AWS!!");
+      console.log("Error Uploading File to AWS: %o",err);
+      cb("Error Uploading File to AWS", null);
+    }
+    console.log(data);
+    cb(null, data);
+  });
+}
+
+
+
+function remove(id) {
+  console.log(id);
+  $.ajax({
+    url: '/employees',
+    method: 'DELETE',
+    data: {
+      residentEmpID: id
+    },
+    success: function(data) {
+      if (!data.error) {
+        window.location.reload();
+      }
+    }
+  });
+}
+
+$(function() {
+  $('#dob').datetimepicker();
+
+  $('#addEmployeeForm').submit(function(e) {
+
+    e.preventDefault();
+    $('#addButton').prop('disabled', true);
+    var formdata = $(this).serializeJSON();
+    var imgFile = $("#employee-photo")[0].files[0];
+    console.log(formdata);
+    $.ajax({
+      url: '/employees',
+      method: 'POST',
+      data: formdata,
+      success: function(data) {
+        if (!data.error) {
+          ulImgToAWS(data.data.id, imgFile, function (err, awsResp) {
+            if (err) {
+              console.log(err);
+            }
+            window.location.reload();
+          })
+        } else {
+          console.log('erro saving employee!');
+        }
+      }
+    });
+
+  });
+});
+</script>
+
+</script>
+</body>
+</html>

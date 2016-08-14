@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+
+    <%- include('../common/stylesheets'); %>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+
+        <!-- page content -->
+
+        <div class="right_col" role="main">
+
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%">
+                <h3>
+                  <i class="fa fa-newspaper-o classified-icon"></i>Classified Ads</h3>
+              </div>
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="x_panel" style="padding:23px 25px;">
+                <div class="row">
+                  <div class="col-lg-9 col-md-10 col-sm-9 col-xs-12">
+
+                    <div class="x_panel" style="padding:10px 26px">
+
+                      <form id="demo-form" data-parsley-validate>
+                        <p class="classified_options">
+
+                          <span class="selected"><input type="radio" class="flat selected" name="isOffering" id="label2" value="1" checked="" required/>
+                            I am Offering</span>
+
+                          <span><input type="radio" class="flat" name="isOffering" id="label3" value="0"/>
+                            I Need</span>
+                        </p>
+
+                      </form>
+
+                      <div class="row">
+                        <form>
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group classified-category">
+                              <label for="new-classified-category">Category</label>
+                              <select class="form-control" id="new-classified-category" name='category'>
+                                <option selected disabled>Please Select</option>
+                                <% categoryList.forEach(function (cat) { %>
+                                <option value="<%= cat %>"><%= cat %></option>
+                                <% }); %>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="clearfix"></div>
+
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label for="new-classified-title">Title</label>
+                            <input type="text" class="form-control" id="new-classified-title" placeholder="Title">
+                          </div>
+
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label for="new-classified-price">Price</label>
+                            <input type="text" class="form-control" id="new-classified-price" placeholder="Rs.">
+                          </div>
+
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label for="fullname">Phone</label>
+                            <input type="text" class="form-control" id="new-classified-phone" placeholder="Phone Number">
+                          </div>
+
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label for="fullname">Email</label>
+                            <input type="email" class="form-control" id="new-classified-email" placeholder="Enter Email">
+                          </div>
+
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label for="new-classified-from">From</label>
+                            <input type="date" class="form-control has-feedback-left" id="new-classified-from" placeholder="Select Date">
+                            <span class="fa fa-calendar form-control-feedback left" aria-hidden="true" style="top:23px;"></span>
+                          </div>
+
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label for="fullname">Valid Till</label>
+                            <input type="date" class="form-control has-feedback-left" id="new-classified-valid-till" placeholder="Select Date">
+                            <span class="fa fa-calendar form-control-feedback left" aria-hidden="true" style="top:23px;"></span>
+                          </div>
+
+                          <%# <span id="upload-file-txt">Upload File (Max 3 Files allowed)</span><br/>
+
+                          <label class="btn btn-primary upload-classified" for="my-file-selector">
+                            <input id="my-file-selector" type="file" style="display:none;">
+                            <i class="fa fa-upload" style="padding-right:9px;"></i>Upload File
+                          </label>%>
+
+                          <div class="col-xs-12 form-group">
+                            <label for="heard">Description</label>
+                            <textarea id="new-classified-details" class="form-control" name="fullname" required rows="5" placeholder="Details"></textarea>
+
+                            <div class="text-center" style="margin-top:18px">
+                              <button id="cancel-btn" class="btn btn-primary">Cancel</button>
+                              &nbsp;
+                              <button id="save-btn" class="btn btn-success">Send</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+
+                    </div>
+                    <!-- x_panel -->
+                  </div>
+                </div>
+              </div>
+              <!-- X_panel  -->
+            </div>
+
+            <!-- /page content -->
+
+          </div>
+          <!-- main container -->
+        </div>
+        <!-- container body -->
+
+        <%- include('../common/javascripts'); %>
+
+        <script type="text/javascript">
+          $(document).ready(function() {
+
+            // POST new classified
+            var postNewClassified = function(data) {
+              $.ajax({
+                url: "/classified",
+                method: "POST",
+                data: data,
+                success: function(result) {
+                  if (result.error) {
+                    alert('oops')
+                  } else {
+                    // alert('yaay');
+                    window.location.href='/classified'
+                  }
+                }
+              });
+            };
+            $("#save-btn").click(function(e) {
+              e.preventDefault();
+              var data = {
+                isOffering: $("input[name='isOffering']:checked").val(),
+                category: $("#new-classified-category").val(),
+                title: $('#new-classified-title').val(),
+                price: $('#new-classified-price').val(),
+                contactPhone: $('#new-classified-phone').val(),
+                contactEmail: $('#new-classified-email').val(),
+                from: $('#new-classified-from').val(),
+                validTill: $('#new-classified-valid-till').val(),
+                description: $('#new-classified-details').val()
+              }
+              // console.log(data); return;
+              postNewClassified(data);
+              $("#modal-add-notice").modal('hide');
+            })
+            $("#cancel-btn").click(function(e) {
+              // window.location.reload();
+              window.history.back();
+            })
+          });
+        </script>
+
+        <!-- PNotify -->
+        <!--
+            <script>
+      $(document).ready(function() {
+        new PNotify({
+          title: "PNotify",
+          type: "info",
+          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+          nonblock: {
+              nonblock: true
+          },
+          addclass: 'dark',
+          styling: 'bootstrap3',
+          hide: false,
+          before_close: function(PNotify) {
+            PNotify.update({
+              title: PNotify.options.title + " - Enjoy your Stay",
+              before_close: null
+            });
+
+            PNotify.queueRemove();
+
+            return false;
+          }
+        });
+
+      });
+            </script>
+          -->
+        <!-- PNotify -->
+
+        <!-- Custom Notification -->
+        <script>
+          $(document).ready(function() {
+            var cnt = 10;
+
+            TabbedNotification = function(options) {
+              var message = "<div id='ntf" + cnt + "' class='text alert-" + options.type + "' style='display:none'><h2><i class='fa fa-bell'></i> " + options.title + "</h2><div class='close'><a href='javascript:;' class='notification_close'><i class='fa fa-close'></i></a></div><p>" + options.text + "</p></div>";
+
+              if (!document.getElementById('custom_notifications')) {
+                alert('doesnt exists');
+              } else {
+                $('#custom_notifications ul.notifications').append("<li><a id='ntlink" + cnt + "' class='alert-" + options.type + "' href='#ntf" + cnt + "'><i class='fa fa-bell animated shake'></i></a></li>");
+                $('#custom_notifications #notif-group').append(message);
+                cnt++;
+                CustomTabs(options);
+              }
+            };
+
+            CustomTabs = function(options) {
+              $('.tabbed_notifications > div').hide();
+              $('.tabbed_notifications > div:first-of-type').show();
+              $('#custom_notifications').removeClass('dsp_none');
+              $('.notifications a').click(function(e) {
+                e.preventDefault();
+                var $this = $(this),
+                  tabbed_notifications = '#' + $this.parents('.notifications').data('tabbed_notifications'),
+                  others = $this.closest('li').siblings().children('a'),
+                  target = $this.attr('href');
+                others.removeClass('active');
+                $this.addClass('active');
+                $(tabbed_notifications).children('div').hide();
+                $(target).show();
+              });
+            };
+
+            CustomTabs();
+
+            var tabid = idname = '';
+
+            $(document).on('click', '.notification_close', function(e) {
+              idname = $(this).parent().parent().attr("id");
+              tabid = idname.substr(-2);
+              $('#ntf' + tabid).remove();
+              $('#ntlink' + tabid).parent().remove();
+              $('.notifications a').first().addClass('active');
+              $('#notif-group div').first().css('display', 'block');
+            });
+          });
+        </script>
+        <!-- /Custom Notification -->
+      </body>
+    </html>

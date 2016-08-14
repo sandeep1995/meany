@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Profile Page</title>
+
+    <%- include('../common/stylesheets'); %>
+    <!-- AWS SDK -->
+    <script type="text/javascript" src="/bower_components/aws-sdk/dist/aws-sdk.min.js"></script>
+
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/resident-navigation'); %>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%">
+                <h3>
+                  <i class="fa fa-user profile-icon"></i>My Profile</h3>
+              </div>
+              <!--
+                    <div class="title_right">
+                        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search for...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">Go!</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div> <!-- title right -->
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+
+                  <div class="x_panel">
+
+                    <div class="x_content" style="padding-top:13px;">
+                      <div class="col-md-3 col-sm-3 col-xs-5 profile_left">
+                        <div class="profile_img">
+                          <div id="crop-avatar">
+                            <input type='file' id='profile-photo' class='file-inp' style="display: none;">
+                            <!-- Current avatar -->
+                            <div class="file-inp-img">
+                              <img class="img-responsive avatar-view hover-pointer" src="<%= user.awsProfilePicURL %>" onError="this.src = '/images/img.jpg'">
+                            </div>
+                          </div>
+                        </div>
+                        <p id="profile-name" style="text-transform:capitalize;"><%= user.name ? user.name : '' %></p>
+
+                        <ul class="list-unstyled user_data">
+                          <li>
+                            <i class="fa fa-mobile-phone user-profile-icon" style="font-size:14px;"></i><%= user.contactPhone ? user.contactPhone : '' %>
+                          </li>
+
+                          <li>
+                            <i class="fa fa-envelope"></i><%= user.contactEmail ? user.contactEmail : '' %>
+                          </li>
+
+                          <li>
+                            <i class="fa fa-briefcase user-profile-icon"></i>
+                            <%= user.profession ? user.profession : '' %>
+                          </li>
+                        </ul>
+                        <div class="make-profile-private">
+                          <p>
+                            <i class="fa fa-lock"></i>Make Profile Private</p>
+                          <span>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" <%= user.isProfilePrivate ? "checked='checked'" : '' %> id="private" name="isProfilePrivate" class="flat">
+                              </label>
+                            </div>
+                          </span>
+                        </div>
+                      </div>
+                      <!-- profile_left -->
+
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+
+                        <form method="POST" id="edit_form" class="form-horizontal form-label-left input_mask">
+
+                          <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                            <label>Name</label>
+                            <input type="text" id="name" name="name" class="form-control has-feedback-left" value="<%= user.name ? user.name : '' %>" placeholder="Enter Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                          </div>
+
+                          <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                            <label>Email Address</label>
+                            <input type="email" name="contactEmail" class="form-control" value="<%= user.contactEmail ? user.contactEmail : '' %>" style="padding-right:42.5px" placeholder="Enter Email">
+                            <span class="fa fa-envelope form-control-feedback right" aria-hidden="true"></span>
+                          </div>
+
+                          <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback" style="margin-top:10px">
+                            <label>Mobile Number</label>
+                            <input type="number" class="form-control has-feedback-left" value="<%= user.contactPhone ? user.contactPhone : '' %>" name="contactPhone" placeholder="Enter Number">
+                            <span class="fa fa-mobile-phone form-control-feedback left" aria-hidden="true" style="font-size:18px;"></span>
+                          </div>
+
+                          <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback" style="margin-top:10px">
+                            <label>Alternate Mobile Number</label>
+                            <input type="number" class="form-control" id="inputSuccess55" style="padding-right:42.5px" value="<%= user.contactPhoneAlter ? user.contactPhoneAlter : '' %>" placeholder="Enter Number" name="contactPhoneAlter">
+                            <span class="fa fa-mobile-phone form-control-feedback right" aria-hidden="true" style="font-size:18px !important;"></span>
+                          </div>
+
+                          <div class="col-md-3 col-sm-3 col-xs-6 form-group has-feedback" style="margin-top:10px">
+                            <label>Block Number
+                            </label>
+                            <input type="text" class="form-control has-feedback-left" value="<%= user.block ? user.block : '' %>" disabled="disabled" placeholder="II">
+                            <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
+                          </div>
+                          <div class="col-md-3 col-sm-3 col-xs-6 form-group has-feedback" style="margin-top:10px">
+                            <label>Flat Number
+                            </label>
+                            <input type="text" class="form-control has-feedback-left" value="<%= user.flatNo ? user.flatNo : '' %>" disabled="disabled" placeholder="003" style="padding-right:10px">
+                            <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
+                          </div>
+                          <div class="clearfix"></div>
+
+                          <div class="col-md-3 col-sm-3 col-xs-6 form-group has-feedback" style="margin-top:10px">
+                            <label>Parking Spcae</label>
+
+                            <input type="text" class="form-control has-feedback-left" value="<%= user.parkingSpace1 ? user.parkingSpace1 : '' %>" name="parkingSpace1>" disabled="disabled" placeholder="003">
+                            <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
+                          </div>
+                          <% if (user.parkingSpace2 ) { %>
+
+                            <div class="col-md-3 col-sm-3 col-xs-6 form-group has-feedback" style="margin-top:10px">
+                              <label>Parking Spcae</label>
+
+                              <input type="text" class="form-control has-feedback-left" value="<%= user.parkingSpace2 ? user.parkingSpace2 : ''%>" name="parkingSpace2>" disabled="disabled" placeholder="003">
+                              <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          <% } %>
+
+                          <% if (user.parkingSpace3 ) { %>
+
+                            <div class="col-md-3 col-sm-3 col-xs-6 form-group has-feedback" style="margin-top:10px">
+                              <label>Parking Spcae</label>
+
+                              <input type="text" class="form-control has-feedback-left" value="<%= user.parkingSpace3 ? user.parkingSpace3 : '' %>" name="parkingSpace3>" disabled="disabled" placeholder="003">
+                              <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          <% } %>
+                          <div class="clearfix"></div>
+
+                          <div class="col-md-3 col-sm-3 col-xs-6 form-group has-feedback" style="margin-top:10px">
+                            <label>Car Number
+                            </label>
+
+                            <input type="text" class="form-control has-feedback-left" value="<%= user.carNumber1 ? user.carNumber1 : '' %>" placeholder="OR 01 - 4444" name="carNumber1">
+                            <span class="fa fa-car form-control-feedback left" aria-hidden="true"></span>
+
+                          </div>
+
+                          <% if (user.carNumber2 ) { %>
+
+                            <div class="col-md-3 col-sm-3 col-xs-6 form-group has-feedback" style="margin-top:10px">
+                              <label>Car Number
+                              </label>
+                              <input type="text" class="form-control has-feedback-left" value="<%= user.carNumber2 ? user.carNumber2 : '' %>" placeholder="OR 01 - 4444" name="carNumber2">
+                              <span class="fa fa-car form-control-feedback left" aria-hidden="true"></span>
+
+                            </div>
+                          <% } %>
+
+                          <% if (user.carNumber3 ) { %>
+
+                            <div class="col-md-3 col-sm-3 col-xs-6 form-group has-feedback" style="margin-top:10px">
+                              <label>Car Number
+                              </label>
+
+                              <input type="text" class="form-control has-feedback-left" value="<%= user.carNumber3 ? user.carNumber3 : '' %>" placeholder="OR 01 - 4444" name="carNumber3">
+                              <span class="fa fa-car form-control-feedback left" aria-hidden="true"></span>
+
+                            </div>
+                          <% } %>
+                          <div class="clearfix"></div>
+                          <br>
+                          <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                            <label>Organisation</label>
+                            <input type="text" class="form-control has-feedback-left" name="organization" value="<%= user.organization ? user.organization : '' %>" placeholder="Enter Organisation">
+                            <span class="fa fa-users form-control-feedback left" aria-hidden="true"></span>
+                          </div>
+
+                          <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                            <label>Designation</label>
+                            <input type="text" class="form-control has-feedback-left" name="designation" value="<%= user.designation ? user.designation : '' %>" placeholder="Enter Designation">
+                            <span class="fa fa-paint-brush form-control-feedback left" aria-hidden="true"></span>
+                          </div>
+
+                          <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                            <label>Profession</label>
+                            <input type="text" class="form-control has-feedback-left" name="profession" value="<%= user.profession ? user.profession : '' %>" placeholder="Enter Profession">
+                            <span class="fa fa-briefcase form-control-feedback left" aria-hidden="true"></span>
+                          </div>
+                          <div class="text-center add-profile">
+
+                            <button class="btn btn-success" id="btn-save" type="submit">Save</button>
+                          </i>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <!-- x_panel -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- /page content -->
+
+          <!-- footer content
+                 <footer>
+                     <div class="pull-right">
+                         Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                     </div>
+                     <div class="clearfix"></div>
+                 </footer>
+                 <!-- /footer content -->
+        </div>
+      </div>
+      <!-- right_col -->
+
+      <div id="custom_notifications" class="custom-notifications dsp_none">
+        <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group"></ul>
+        <div class="clearfix"></div>
+        <div id="notif-group" class="tabbed_notifications"></div>
+      </div>
+    </div>
+    <!-- main container -->
+  </div>
+  <!-- container body -->
+
+  <!-- jQuery -->
+  <script src="/vendors/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- FastClick -->
+  <script src="/vendors/fastclick/lib/fastclick.js"></script>
+  <!-- NProgress -->
+  <script src="/vendors/nprogress/nprogress.js"></script>
+  <!-- bootstrap-progressbar -->
+  <script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+  <!-- iCheck -->
+  <script src="/vendors/iCheck/icheck.min.js"></script>
+  <!-- PNotify -->
+  <script src="/vendors/pnotify/dist/pnotify.js"></script>
+  <script src="/vendors/pnotify/dist/pnotify.buttons.js"></script>
+  <script src="/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+  <script type="text/javascript" src="/vendors/serializejson.min.js"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="/js/custom.min.js"></script>
+
+  <script type="text/javascript">
+
+
+    $('.file-inp-img').click(function(e) {
+      $(this).prev('.file-inp').click(); // simulate click on input[type=file] when clicking on placeholder phot
+    });
+
+    $('.file-inp').change(function() { // show preview of selected photo
+      var fileInp = this;
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        the_url = event.target.result
+        $(fileInp).next('.file-inp-img').html("<img class='img img-responsive' src='" + the_url + "'/>")
+      }
+      reader.readAsDataURL(this.files[0]);
+
+    })
+
+    // AWS Config
+    var tempCreds = {
+      accessKeyId: '<%= tempCreds.AccessKeyId %>',
+      secretAccessKey: '<%= tempCreds.SecretAccessKey %>',
+      sessionToken: '<%= tempCreds.SessionToken %>'
+    }
+    AWS.config.update(tempCreds);
+    // Configure your region
+    AWS.config.region = '<%= awsRegion %>';
+    var bucket = new AWS.S3({
+      params: {
+        Bucket: '<%= awsImageBucketName %>'
+      }
+    });
+
+    var ulImgToAWS = function(key, file, cb) {
+      if (!file || !key)
+        cb("AWS UL Error: Either no File OR no Key!!", null);
+      var params = {
+        Key: key,
+        ContentType: file.type,
+        Body: file
+      };
+      bucket.upload(params, function(err, data) {
+        if (err) {
+          // alert("Error Uploading File to AWS!!");
+          console.log("Error Uploading File to AWS: %o", err);
+          cb("Error Uploading File to AWS", null);
+        }
+        console.log(data);
+        cb(null, data);
+      });
+    }
+
+
+    var $edit_form = $('#edit_form');
+    $edit_form.submit(function(e) {
+      e.preventDefault();
+      var formData = $(this).serializeJSON();
+      var isProfilePrivate = $('#private').is(':checked');
+      formData.isProfilePrivate = isProfilePrivate;
+
+      var imgFile = $("#profile-photo")[0].files[0];
+
+      console.log(formData);
+
+      $.ajax({
+        method: "POST",
+        url: "/editProfile",
+        data: formData,
+        success: function(data) {
+          if (!data.error) {
+            $('#profile-name').html($('#name').val());
+            var key = '<%= user.id %>';
+            ulImgToAWS(key, imgFile, function (err, awsResp) {
+              if (err) {
+                // alert('Failed uploading image to AWS');
+                console.log('Failed uploading image to AWS: ', err);
+              }
+              window.location.reload();
+            })
+          }
+        },
+        error: function(err) {
+          console.log(err);
+        },
+        complete: function() {}
+      });
+    });
+  </script>
+
+</body>
+</html>

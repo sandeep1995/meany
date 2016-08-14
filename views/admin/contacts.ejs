@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Contact Us</title>
+
+    <%- include('../common/stylesheets'); %>
+     <style type="text/css">
+      tr:hover {
+        cursor: pointer;
+      }
+  </style>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <%- include('../common/navigation'); %>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+
+          <div class="">
+            <div class="page-title">
+              <div class="title_left" style="width:100%">
+                <h3>
+                  <i class="fa fa-envelope contact-us-icon"></i>Contacts</h3>
+              </div>
+            
+            </div>
+            <!-- page title -->
+
+            <div class="clearfix"></div>
+
+            <div class="">
+
+              <div class="clearfix"></div>
+
+              <div class="x_panel" style="padding:23px 25px;">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="x_panel" style="padding:0 5px;">
+
+                      <form class="form-inline search-visitor-field">
+                        <h4 class="label-filter">
+                          <i class="fa fa-filter"></i>Filter</h4>
+                        <div class="form-group service-request">
+                          <select class="form-control" name="status">
+                            <option disabled selected>Status</option>
+                            <option value="In Progress" <%= (query.status == "In Progress") ? 'selected' : '' %> >In Progress</option>
+                            <option value="Closed" <%= (query.status == "Closed") ? 'selected' : '' %> >Closed</option>
+                          </select>
+                        </div>
+                        <div class="form-group service-request">
+                          <select class="form-control" name="category">
+                            <option disabled selected>Category</option>
+                            <option value="General" <%= (query.category == "General") ? 'selected' : '' %>>General</option>
+                            <option value="Complaints" <%= (query.category == "Complaints") ? 'selected' : '' %>>Complaints</option>
+                            <option value="Suggestion" <%= (query.category == "Suggestion") ? 'selected' : '' %>>Suggestion</option>
+                          </select>
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" value="<%= query.block ? query.block : '' %>" name="block" placeholder="Block Number">
+                        </div>
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" value="<%= query.flatNo ? query.flatNo : '' %>" name="flatNo" placeholder="Flat Number">
+                        </div>
+                        <button class="btn btn-success btn-search" type="submit" style="margin-top:5px;">
+                          <i class="fa fa-search" style="font-size:20px"></i>
+                        </button>
+
+                        <a href="/admin/contacts" class="btn btn-sm btn-info"> Clear Filter</a>
+                      </form>
+                    </div>
+                    <!-- x_panel -->
+                  </div>
+                </div>
+ <% if (!error && data.length == 0) { %>
+<div class="row">
+ <div class="col-md-12 col-sm-12 col-xs-12">
+                <p class="lead text-center">No messages found</p>
+                </div>
+</div>
+            <% } else { %>
+
+            <div class="row">
+               
+                                <div class="x_panel" style="padding:0">
+                                    <div class="x_title label-my-complaints">
+                                        
+                    <h2>My Complaints</h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content" style="padding:0">
+                                        <table class="table complain-table">
+                                            <thead>
+
+
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Subject</th>
+                                                <th>Category</th>
+                                              <th>Opened By</th>
+                                                <th>Status</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                   <% for ( var i = 0; i < data.length; i++) { %>
+                                        <tr data-toggle="collapse" data-target="#info-row-<%= data[i].id%>">
+                                                <th><%= moment(data[i].dateOpened).format('DD-MMM-YYYY'); %></th>
+                                                <td><%= data[i].subject  %></td>
+                                                <td><%= data[i].category %></td>
+                                                <td><%= data[i].openedBy.name %> ( <%= data[i].openedBy.block %> , <%= data[i].openedBy.flatNo %> ) </td>
+                                                <td><%= data[i].status %></td>
+                                            </tr>
+                      <tr id="info-row-<%= data[i].id%>" class="collapse">
+                                                <td colspan="6" class="complain-dropdown">
+                       <% for (var j = 0; j < data[i].messages.length; j++ ) { %>
+
+                          <div class="gray-bg" style="padding:7px 10px;">
+                            <h5><b> <%= data[i].messages[j].userId.name %> </b> (<%= data[i].messages[j].userId.role %>)
+                            <span> <%= moment(data[i].messages[j].dateTime).format('DD-MMM-YYYY, hh:mm A'); %></span></h5>
+                          <p> <%= data[i].messages[j].message %></p>
+                          </div>
+                       
+                           <% } %>
+
+                            <form class="form-group">
+                            <div class="col-xs-12">
+                              <textarea class="form-control" rows="2" placeholder="Reply" id="reply-<%= data[i].id%>"></textarea>
+                            <div class="text-center" style="margin-top:10px; margin-bottom:5px;">
+                            </div>
+                                <div class="form-inline service-request text-center">
+                                      <select class="form-control" name="status" id="status-<%= data[i].id%>">
+                                                                
+                                                                <option value="In Progress" <%= (data[i].status == "In Progress") ? 'selected' : "" %> >In Progress</option>
+                                                                <option value="Closed"
+                                                                 <%= (data[i].status == "Closed") ? 'selected' : "" %> 
+                                                                >Closed</option>
+                                      </select>
+                              &nbsp; &nbsp; &nbsp;
+                              <button class="btn btn-xs btn-success" type="submit">&nbsp; Send &nbsp; </button>
+                                    </div>
+                            </div>
+                          </form> <!-- form-group -->
+                           </td>
+                          </tr>
+                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div> <!-- x-content -->
+                                </div>  <!-- x_panel -->
+                            </div>
+            </div>
+                    </div>  <!-- x_panel  -->
+                </div>
+                <% } %>
+
+          <!-- /page content -->
+
+            <!-- footer content -->
+            <!--
+                 <footer>
+                     <div class="pull-right">
+                         Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                     </div>
+                     <div class="clearfix"></div>
+                 </footer>
+               -->
+            <!-- /footer content -->
+          </div>
+        </div>
+        <!-- right_col -->
+
+        <div id="custom_notifications" class="custom-notifications dsp_none">
+          <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group"></ul>
+          <div class="clearfix"></div>
+          <div id="notif-group" class="tabbed_notifications"></div>
+        </div>
+      </div>
+      <!-- main container -->
+    </div>
+    <!-- container body -->
+
+    <%- include('../common/javascripts'); %>
+
+<script type="text/javascript">
+   <% for ( var i = 0; i < data.length; i++) { %> 
+
+        $('#info-row-<%= data[i].id%>').submit(function (e) {
+          e.preventDefault();
+          if ($('#reply-<%= data[i].id %>').val() == '')
+            return;
+          var replyMsg = $('#reply-<%= data[i].id %>').val();
+          var status = $('#status-<%= data[i].id %>').val();
+          var contactId = "<%= data[i].id%>";
+          $.ajax({
+            url: '/admin/reply',
+            method: 'POST',
+            data: {
+              message: replyMsg,
+              status: status,
+              contactId: contactId
+            },
+            success: function (data) {
+              console.log(data);
+              if ( !data.error)
+                window.location.href = window.location.href;
+            }
+          });
+        })
+
+    <% } %>
+</script>
+  </body>
+</html>
